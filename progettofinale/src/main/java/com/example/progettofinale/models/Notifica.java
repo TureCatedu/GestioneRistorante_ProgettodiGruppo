@@ -53,6 +53,12 @@ public class Notifica {
         this.id = id;
         this.prenotazione = prenoazione;
     }
+
+    //to string
+    @Override
+    public String toString() {
+        return "Notifica{" + "id =" + id + ", prenotazione =" + prenotazione.getId() + ", descrizione=" + descrizione + '}';
+    }
     
     
 }
