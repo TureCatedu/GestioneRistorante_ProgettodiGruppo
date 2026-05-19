@@ -1,3 +1,4 @@
+package com.example.progettofinale.models;
 import java.time.LocalDateTime;
 
 public class Prenotazione{
