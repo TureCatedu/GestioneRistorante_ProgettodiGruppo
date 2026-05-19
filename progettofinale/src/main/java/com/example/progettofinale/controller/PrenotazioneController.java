@@ -3,15 +3,15 @@ package com.example.progettofinale.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.progettofinale.services.PrenotazioneService;
+import com.example.progettofinale.services.Ristorante;
 
 @RestController
 @RequestMapping("/api/prenotazione")
 public class PrenotazioneController {
 
-    private final PrenotazioneService prenotazioneService;
+    private final Ristorante r;
 
-    public PrenotazioneController(PrenotazioneService prenotazioneService){
-        this.prenotazioneService = prenotazioneService;
+    public PrenotazioneController(Ristorante r){
+        this.r = r;
     }
 }
