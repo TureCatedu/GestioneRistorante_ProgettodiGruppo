@@ -12,6 +12,9 @@ import com.example.progettofinale.models.Utente;
 @Repository
 public interface UtenteRepo extends JpaRepository<Utente, Integer>
 {
+    // Ricerca per email (utile per il login e per garantire l'unicità)
+    Optional<Utente> findByEmail(String email);
+
     // Per il Login: ricerca tramite email (essendo univoca)
     Optional<Utente> findByEmailAndPassword(String email, String password);
 
