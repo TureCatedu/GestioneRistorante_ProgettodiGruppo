@@ -27,22 +27,26 @@ public class Ristorante implements Subject {
     Notificatore notificatore;
     //observers
     List<Observer> observers = new ArrayList<>();
+    
     // costruttore con parametri per l'injection
     public Ristorante(PrenotazioneRepo prenotazioneRepo, Notificatore notificatore, UtenteRepo utenteRepo) {
         this.prenotazioneRepo = prenotazioneRepo;
         this.notificatore = notificatore;
         this.utenteRepo = utenteRepo;
     }
+
     //metodo per registrare un observer
     @Override
     public void registerObserver(Observer o) {
         observers.add(o);
     }
+
     //metodo per rimuovere un observer
     @Override
     public void removeObserver(Observer o) {
         observers.remove(o);
     }
+
     //metodo per notificare un observer
     @Override
     public void notifyObservers(Notifica notifica) {
