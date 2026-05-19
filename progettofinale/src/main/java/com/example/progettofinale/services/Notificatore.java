@@ -3,21 +3,26 @@ package com.example.progettofinale.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
+import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.models.NotificaResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.NotificatoreRepo;
+import com.example.progettofinale.repository.PrenotazioneRepo;
 import com.example.progettofinale.repository.UtenteRepo;
 
 public class Notificatore implements Observer {
     private final NotificatoreRepo notificatoreRepo;
+    private final PrenotazioneRepo prenotazioneRepo;
     UtenteRepo utenteRepo;
     //costruttore con parametri per l'injection
-    public Notificatore(NotificatoreRepo notificatoreRepo, UtenteRepo utenteRepo) {
+    public Notificatore(NotificatoreRepo notificatoreRepo, PrenotazioneRepo prenotazioneRepo, UtenteRepo utenteRepo) {
         this.notificatoreRepo = notificatoreRepo;
         this.utenteRepo = utenteRepo;
+        this.prenotazioneRepo = prenotazioneRepo;
     }
     @Override
     public void update(Notifica notifica) {
@@ -41,10 +46,7 @@ public class Notificatore implements Observer {
 
     //ottieni notifiche per utente
     public List<NotificaResponse> getNotificazioniPerUtente(int idUtente) {
-        Utente utente = utenteRepo.findById(idUtente).orElse(null);
-        if (utente == null) {
-            return null;
-        }
+        utenteRepo.findById(idUtente).orElseThrow(() -> new UtenteNonTrovatoException(idUtente));
         List<Notifica> notifiche = notificatoreRepo.findByUtenteId(idUtente);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
@@ -54,6 +56,8 @@ public class Notificatore implements Observer {
     }
     //Ottieni tutte le notifiche per un prenotazione
     public List<NotificaResponse> getNotificazioniPerPrenotazione(int idPrenotazione) {
+        prenotazioneRepo.findById(idPrenotazione).orElseThrow(() -> new PrenotazioneNonTrovataException(idPrenotazione));
+       
         List<Notifica> notifiche = notificatoreRepo.findByPrenotazioneId(idPrenotazione);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
@@ -72,10 +76,7 @@ public class Notificatore implements Observer {
     }
     //cancella notiche per utente
     public void cancellaNotifichePerUtente(int idUtente) {
-        Utente utente = utenteRepo.findById(idUtente).orElse(null);
-        if (utente == null) {
-            return;
-        }
+        utenteRepo.findById(idUtente).orElseThrow(() -> new UtenteNonTrovatoException(idUtente));
         notificatoreRepo.deleteByUtenteId(idUtente);
     }
     

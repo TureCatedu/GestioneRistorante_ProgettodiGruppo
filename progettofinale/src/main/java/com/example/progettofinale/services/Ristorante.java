@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.PrenotazioneRequest;
@@ -75,10 +76,7 @@ public class Ristorante implements Subject {
 
     // cerca prenotazione
     public PrenotazioneResponse cercaPrenotazione(Integer id) {
-        Prenotazione prenotazione = prenotazioneRepo.findById(id).orElse(null);
-        if (prenotazione == null) {
-            return null;
-        }
+        Prenotazione prenotazione = prenotazioneRepo.findById(id).orElseThrow(() -> new PrenotazioneNonTrovataException(id));
         return prenotazione(prenotazione);
     }
 
@@ -112,10 +110,7 @@ public class Ristorante implements Subject {
 
     // elimina prenotazione
     public void eliminaPrenotazione(Integer id) {
-        Prenotazione prenotazione = prenotazioneRepo.findById(id).orElse(null);
-        if (prenotazione == null) {
-            return;
-        }
+        Prenotazione prenotazione = prenotazioneRepo.findById(id).orElseThrow(() -> new PrenotazioneNonTrovataException(id));
         prenotazioneRepo.delete(prenotazione);
         notifyObservers(new Notifica(prenotazione, "Prenotazione eliminata"));
     }
@@ -123,8 +118,8 @@ public class Ristorante implements Subject {
     // modifica prenotazione
     public PrenotazioneResponse modificaPrenotazione(Integer id, PrenotazioneRequest prenotazioneRequest) {
         Optional<Prenotazione> prenotazione = prenotazioneRepo.findById(id);
-        if (prenotazione == null) {
-            return null;
+        if (prenotazione.isEmpty()) {
+            throw new PrenotazioneNonTrovataException(id);
         }
         Prenotazione prenotazioneDb = prenotazione.get();
         prenotazioneDb.setNomeCliente(prenotazioneRequest.nomeCliente());
