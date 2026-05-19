@@ -19,7 +19,7 @@ public class Prenotazione{
     
     @NotNull
     @Valid
-    private Utente nomeCliente;
+    private Utente cliente;
     
     @NotNull
     @Positive(message = "la prenotazione deve avere almeno 1 persona")
@@ -32,18 +32,18 @@ public class Prenotazione{
     public Prenotazione() {
     }
 
-    public Prenotazione(Utente nomeCliente, int numeroPersone, LocalDateTime dataOra) {
-        this.nomeCliente = nomeCliente;
+    public Prenotazione(Utente cliente, int numeroPersone, LocalDateTime dataOra) {
+        this.cliente = cliente;
         this.numeroPersone = numeroPersone;
         this.dataOra = dataOra;
     }
     
     public Utente getNomeCliente() {
-        return this.nomeCliente;
+        return this.cliente;
     }
 
     public void setNomeCliente(Utente nomeCliente) {
-        this.nomeCliente = nomeCliente;
+        this.cliente = nomeCliente;
     }
 
     public int getNumeroPersone() {
