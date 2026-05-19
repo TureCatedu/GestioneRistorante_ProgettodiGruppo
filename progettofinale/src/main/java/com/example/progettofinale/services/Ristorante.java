@@ -42,11 +42,11 @@ public class Ristorante implements Subject {
         }
     }
     //PrenotazioneRequest to Prenotazione
-    public Prenotazione prenotazione(PrenotazioneRequest prenotazioneRequest) {
+    Prenotazione prenotazione(PrenotazioneRequest prenotazioneRequest) {
         return new Prenotazione(prenotazioneRequest.nomeCliente(), prenotazioneRequest.numeroPersone(), prenotazioneRequest.dataOra());
     }
     //Prenotazione to NotificaResponse
-    public PrenotazioneResponse prenotazione(Prenotazione prenotazione) {
+    PrenotazioneResponse prenotazione(Prenotazione prenotazione) {
         return new PrenotazioneResponse(prenotazione.getId(), prenotazione.getNomeCliente(), prenotazione.getNumeroPersone(), prenotazione.getDataOra());
     }
 

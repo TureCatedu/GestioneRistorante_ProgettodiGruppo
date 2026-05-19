@@ -21,7 +21,7 @@ public class Notifica {
     @ManyToOne
     @JoinColumn(name = "utente_id", nullable = false)
     @NotNull
-    private Cliente cliente;
+    private Utente utente;
     //descrizione non nulla e max 255 caratteri
     @NotNull
     @Size(max = 255)
@@ -50,14 +50,12 @@ public class Notifica {
         this.prenotazione = prenotazione;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Utente getUtente() {
+        return utente;
     }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setUtente(Utente utente) {
+        this.utente = utente;
     }
-
     public String getDescrizione() {
         return descrizione;
     }
