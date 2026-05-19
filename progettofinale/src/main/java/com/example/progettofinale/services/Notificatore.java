@@ -17,11 +17,13 @@ import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.PrenotazioneRepo;
 import com.example.progettofinale.repository.UtenteRepo;
 
+//service per gestione notifiche
 @Service
 public class Notificatore implements Observer {
+    //attributi per injection
     private final NotificatoreRepo notificatoreRepo;
     private final PrenotazioneRepo prenotazioneRepo;
-    UtenteRepo utenteRepo;
+    private final UtenteRepo utenteRepo;
     //costruttore con parametri per l'injection
     public Notificatore(NotificatoreRepo notificatoreRepo, PrenotazioneRepo prenotazioneRepo, UtenteRepo utenteRepo) {
         this.notificatoreRepo = notificatoreRepo;
