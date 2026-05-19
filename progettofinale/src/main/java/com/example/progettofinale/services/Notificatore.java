@@ -10,6 +10,7 @@ import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.models.NotificaResponse;
+import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.NotificatoreRepo;
@@ -39,12 +40,13 @@ public class Notificatore implements Observer {
         }
     }
     //da notifica a notificaResponse
-    NotificaResponse notifica(Notifica notifica) {
-        return new NotificaResponse(notifica.getId(), notifica.getPrenotazione(), notifica.getDescrizione());
+    NotificaResponse toNotificaResponse(Notifica notifica) {
+        return new NotificaResponse(notifica.getId(), notifica.getPrenotazione().getId(), notifica.getDescrizione());
     }
     //da notificaRequest a notifica
-    Notifica notifica(NotificaRequest notificaRequest) {
-        return new Notifica(notificaRequest.prenotazione(), notificaRequest.descrizione());
+    Notifica toNotifica(NotificaRequest notificaRequest) {
+        Prenotazione prenotazione = prenotazioneRepo.findById(notificaRequest.prenotazioneId()).orElseThrow(() -> new PrenotazioneNonTrovataException(notificaRequest.prenotazioneId()));
+        return new Notifica(prenotazione, notificaRequest.descrizione());
     }
 
     //ottieni notifiche per utente
@@ -53,18 +55,18 @@ public class Notificatore implements Observer {
         List<Notifica> notifiche = notificatoreRepo.findByUtenteId(idUtente);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
     //Ottieni tutte le notifiche per un prenotazione
     public List<NotificaResponse> getNotificazioniPerPrenotazione(int idPrenotazione) {
         prenotazioneRepo.findById(idPrenotazione).orElseThrow(() -> new PrenotazioneNonTrovataException(idPrenotazione));
-       
+    
         List<Notifica> notifiche = notificatoreRepo.findByPrenotazioneId(idPrenotazione);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
@@ -73,7 +75,7 @@ public class Notificatore implements Observer {
         List<Notifica> notifiche = notificatoreRepo.findAll();
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
@@ -86,6 +88,6 @@ public class Notificatore implements Observer {
     //salva notifica
     NotificaResponse salvaNotifica(Notifica notifica) {
         Notifica notificaDb = notificatoreRepo.save(notifica);
-        return notifica(notificaDb);
+        return toNotificaResponse(notificaDb);
     }
 }

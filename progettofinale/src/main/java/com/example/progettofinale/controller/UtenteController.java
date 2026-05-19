@@ -42,7 +42,7 @@ public class UtenteController {
     @GetMapping("/cognome-nome")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public ResponseEntity<List<Utente>> findByCognomeNome(@RequestParam String cognome, @RequestParam String nome) {
-        List<Utente> utenti = utenteRepo.findByCognomeNomeIgnoreCase(cognome, nome);
+        List<Utente> utenti = utenteRepo.findByCognomeAndNomeIgnoreCase(cognome, nome);
         return utenti.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(utenti);
     }
 
@@ -67,7 +67,7 @@ public class UtenteController {
     // POST: Login (Nessuna annotazione, deve essere accessibile a chi non è ancora loggato)
     @PostMapping("/login")
     public ResponseEntity<Utente> login(@RequestParam String email, @RequestParam String password) {
-        return utenteRepo.findByEmailPassword(email, password)
+        return utenteRepo.findByEmailAndPassword(email, password)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
