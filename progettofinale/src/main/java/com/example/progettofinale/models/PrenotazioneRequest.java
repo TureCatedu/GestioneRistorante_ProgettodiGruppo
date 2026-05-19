@@ -12,7 +12,7 @@ public record PrenotazioneRequest (
     @NotEmpty
     @NotNull
     @Size(min = 5, max = 20, message = "il nome utente è obbligatorio")
-    Utente nomeCliente,
+    Utente utente,
     @NotNull
     @Positive(message = "la prenotazione deve avere almeno 1 persona")
     int numeroPersone,

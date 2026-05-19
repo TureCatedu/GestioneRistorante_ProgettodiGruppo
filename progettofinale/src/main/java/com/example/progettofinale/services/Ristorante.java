@@ -39,7 +39,7 @@ public class Ristorante implements Subject {
     }
     //PrenotazioneRequest to Prenotazione
     Prenotazione prenotazione(PrenotazioneRequest prenotazioneRequest) {
-        return new Prenotazione(prenotazioneRequest.nomeCliente(), prenotazioneRequest.numeroPersone(), prenotazioneRequest.dataOra());
+        return new Prenotazione(prenotazioneRequest.utente(), prenotazioneRequest.numeroPersone(), prenotazioneRequest.dataOra());
     }
     //Prenotazione to NotificaResponse
     PrenotazioneResponse prenotazione(Prenotazione prenotazione) {
@@ -80,7 +80,7 @@ public class Ristorante implements Subject {
             throw new PrenotazioneNonTrovataException(id);
         }
         Prenotazione prenotazioneDb = prenotazione.get();
-        prenotazioneDb.setNomeCliente(prenotazioneRequest.nomeCliente());
+        prenotazioneDb.setNomeCliente(prenotazioneRequest.utente());
         prenotazioneDb.setNumeroPersone(prenotazioneRequest.numeroPersone());
         prenotazioneDb.setDataOra(prenotazioneRequest.dataOra());
         Prenotazione updated = prenotazioneRepo.save(prenotazioneDb);
