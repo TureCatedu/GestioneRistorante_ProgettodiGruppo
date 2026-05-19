@@ -17,11 +17,13 @@ import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.PrenotazioneRepo;
 import com.example.progettofinale.repository.UtenteRepo;
 
+//service per gestione notifiche
 @Service
 public class Notificatore implements Observer {
+    //attributi per injection
     private final NotificatoreRepo notificatoreRepo;
     private final PrenotazioneRepo prenotazioneRepo;
-    UtenteRepo utenteRepo;
+    private final UtenteRepo utenteRepo;
     //costruttore con parametri per l'injection
     public Notificatore(NotificatoreRepo notificatoreRepo, PrenotazioneRepo prenotazioneRepo, UtenteRepo utenteRepo) {
         this.notificatoreRepo = notificatoreRepo;
@@ -40,11 +42,11 @@ public class Notificatore implements Observer {
         }
     }
     //da notifica a notificaResponse
-    NotificaResponse notifica(Notifica notifica) {
+    NotificaResponse toNotificaResponse(Notifica notifica) {
         return new NotificaResponse(notifica.getId(), notifica.getPrenotazione().getId(), notifica.getDescrizione());
     }
     //da notificaRequest a notifica
-    Notifica notifica(NotificaRequest notificaRequest) {
+    Notifica toNotifica(NotificaRequest notificaRequest) {
         Prenotazione prenotazione = prenotazioneRepo.findById(notificaRequest.prenotazioneId()).orElseThrow(() -> new PrenotazioneNonTrovataException(notificaRequest.prenotazioneId()));
         return new Notifica(prenotazione, notificaRequest.descrizione());
     }
@@ -55,7 +57,7 @@ public class Notificatore implements Observer {
         List<Notifica> notifiche = notificatoreRepo.findByUtenteId(idUtente);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
@@ -66,7 +68,7 @@ public class Notificatore implements Observer {
         List<Notifica> notifiche = notificatoreRepo.findByPrenotazioneId(idPrenotazione);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
@@ -75,7 +77,7 @@ public class Notificatore implements Observer {
         List<Notifica> notifiche = notificatoreRepo.findAll();
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {
-            notificheResponse.add(notifica(notifica));
+            notificheResponse.add(toNotificaResponse(notifica));
         }
         return notificheResponse;
     }
@@ -88,6 +90,6 @@ public class Notificatore implements Observer {
     //salva notifica
     NotificaResponse salvaNotifica(Notifica notifica) {
         Notifica notificaDb = notificatoreRepo.save(notifica);
-        return notifica(notificaDb);
+        return toNotificaResponse(notificaDb);
     }
 }

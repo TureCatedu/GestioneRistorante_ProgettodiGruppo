@@ -6,18 +6,11 @@ import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
 
 import java.util.List;
-
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/utenti")
@@ -31,34 +24,48 @@ public class UtenteController {
 
     // GET: trova utente per ID
     @GetMapping("/{id}") 
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public ResponseEntity<Utente> findById(@PathVariable Integer id) {
         return utenteRepo.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // GET: lista di tutti gli utenti
+    // GET: lista di tutti gli utenti (Solo Admin)
     @GetMapping
+    @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public ResponseEntity<List<Utente>> findAll() {
         List<Utente> utenti = utenteRepo.findAll();
         return ResponseEntity.ok(utenti);
     }
 
-    // GET: cerca utenti per cognome e nome
+    // GET: cerca utenti per cognome e nome (Admin e Camerieri)
     @GetMapping("/cognome-nome")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public ResponseEntity<List<Utente>> findByCognomeNome(@RequestParam String cognome, @RequestParam String nome) {
         List<Utente> utenti = utenteRepo.findByCognomeAndNomeIgnoreCase(cognome, nome);
         return utenti.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(utenti);
     }
 
-    // GET: trova utenti per ruolo (es. tutti i camerieri)
+    // GET: trova utenti per ruolo (Solo Admin)
     @GetMapping("/ruolo")
+    @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public ResponseEntity<List<Utente>> findByRuolo(@RequestParam Ruolo ruolo) {
         List<Utente> utenti = utenteRepo.findByRuolo(ruolo);
         return ResponseEntity.ok(utenti);
     }
 
-    // POST: Login
+    // GET: Ottieni il profilo appena loggato 
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    public ResponseEntity<Utente> getMioProfilo(Authentication authentication) {
+        // authentication.getName() conterrà l'email dell'utente loggato con la Basic Auth
+        return utenteRepo.findByEmail(authentication.getName())
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // POST: Login 
     @PostMapping("/login")
     public ResponseEntity<Utente> login(@RequestBody LoginRequest request) {
         return utenteRepo.findByEmailAndPassword(request.email(), request.password())
@@ -70,14 +77,14 @@ public class UtenteController {
     @PostMapping
     public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
         Utente utenteSalvato = utenteRepo.save(nuovoUtente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); // Ritorna 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); 
     }
 
-    // PUT: 
+    // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public ResponseEntity<Utente> updateUtente(@PathVariable Integer id, @RequestBody Utente utenteAggiornato) {
         return utenteRepo.findById(id).map(utenteEsistente -> {
-            
             utenteEsistente.setNome(utenteAggiornato.getNome());
             utenteEsistente.setCognome(utenteAggiornato.getCognome());
             utenteEsistente.setEmail(utenteAggiornato.getEmail());
@@ -89,13 +96,14 @@ public class UtenteController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // DELETE: Rimuove un utente per ID
+    // DELETE: Rimuove un utente per ID (Solo Admin)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public ResponseEntity<Void> deleteUtente(@PathVariable Integer id) {
         if (utenteRepo.existsById(id)) {
             utenteRepo.deleteById(id);
-            return ResponseEntity.noContent().build(); // Ritorna 204 No Content se l'eliminazione ha successo
+            return ResponseEntity.noContent().build(); 
         }
-        return ResponseEntity.notFound().build(); // Ritorna 404 Not Found se l'ID non esiste
+        return ResponseEntity.notFound().build(); 
     }
 }
