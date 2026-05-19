@@ -64,4 +64,7 @@ public class Prenotazione{
         this.dataOra = dataOra;
     }
 
+    public int getId(){
+        return this.idPrenotazione;
+    }
 }
