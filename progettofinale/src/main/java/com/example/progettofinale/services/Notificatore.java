@@ -30,6 +30,7 @@ public class Notificatore implements Observer {
         this.utenteRepo = utenteRepo;
         this.prenotazioneRepo = prenotazioneRepo;
     }
+    //override update del subject
     @Override
     public void update(Notifica notifica) {
         List<Utente> utenti = utenteRepo.findByRuolo(Ruolo.AMMINISTRATORE);
@@ -51,7 +52,7 @@ public class Notificatore implements Observer {
         return new Notifica(prenotazione, notificaRequest.descrizione());
     }
 
-    //ottieni notifiche per utente
+    //ottieni notifiche per un utente
     public List<NotificaResponse> getNotificazioniPerUtente(int idUtente) {
         utenteRepo.findById(idUtente).orElseThrow(() -> new UtenteNonTrovatoException(idUtente));
         List<Notifica> notifiche = notificatoreRepo.findByUtenteId(idUtente);
@@ -61,7 +62,7 @@ public class Notificatore implements Observer {
         }
         return notificheResponse;
     }
-    //Ottieni tutte le notifiche per un prenotazione
+    //Ottieni tutte le notifiche per una prenotazione
     public List<NotificaResponse> getNotificazioniPerPrenotazione(int idPrenotazione) {
         prenotazioneRepo.findById(idPrenotazione).orElseThrow(() -> new PrenotazioneNonTrovataException(idPrenotazione));
     
@@ -81,7 +82,7 @@ public class Notificatore implements Observer {
         }
         return notificheResponse;
     }
-    //cancella notiche per utente
+    //cancella notiche di un utente
     public void cancellaNotifichePerUtente(int idUtente) {
         utenteRepo.findById(idUtente).orElseThrow(() -> new UtenteNonTrovatoException(idUtente));
         notificatoreRepo.deleteByUtenteId(idUtente);
