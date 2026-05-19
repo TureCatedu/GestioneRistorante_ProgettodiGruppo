@@ -7,11 +7,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.progettofinale.models.Notifica;
-import com.example.progettofinale.models.NotificaResponse;
 import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
-import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.PrenotazioneRepo;
 
@@ -97,9 +95,9 @@ public class Ristorante implements Subject {
         notifyObservers(new Notifica(updated, "Prenotazione modificata"));
         return prenotazione(updated);
     }
-    //cerca per nome cliente
-    public List<PrenotazioneResponse> cercaPrenotazionePerNomeCliente(String nomeCliente) {
-        List<Prenotazione> prenotazioni = prenotazioneRepo.findByNomeCliente(nomeCliente);
+    //cerca per nome e cognome cliente
+    public List<PrenotazioneResponse> cercaPrenotazionePerNomeCliente(String nome, String cognome) {
+        List<Prenotazione> prenotazioni = prenotazioneRepo.findByCliente_NomeAndCliente_Cognome(nome, cognome);
         List<PrenotazioneResponse> prenotazioniResponse = new ArrayList<>();
         for (Prenotazione prenotazione : prenotazioni) {
             prenotazioniResponse.add(prenotazione(prenotazione));
