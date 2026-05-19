@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Cliente extends Utente {
 
     private String numeroTelefono;
-
+    
     public Cliente() {
         super();
     }

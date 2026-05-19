@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record PrenotazioneResponse (
     Integer id,
-    String nomeCliente,
+    Utente nomeCliente,
     int numeroPersone,
     LocalDateTime dataOra
 ){}
