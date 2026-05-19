@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Repository
 public interface PrenotazioneRepo extends JpaRepository<Prenotazione,Integer>{
     
-    List<Prenotazione> findByNomeCliente(String nomeCliente);
+    List<Prenotazione> findByCliente_NomeAndCliente_Cognome(String nome, String cognome);
 
     List<Prenotazione> findByNumeroPersone(int numeroPersone);
 
