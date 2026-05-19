@@ -3,6 +3,7 @@ package com.example.progettofinale.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -17,11 +18,21 @@ public class Notifica {
     @ManyToOne
     @JoinColumn(name = "prenotazione_id")
     private Prenotazione prenotazione;
+    @ManyToMany
+    @NotNull
+
     //descrizione non nulla e max 255 caratteri
     @NotNull
     @Size(max = 255)
     private String descrizione;
-    
+    //costruttore jpa
+    protected Notifica() {
+    }
+    //costruttore con parametri
+    public Notifica(Prenotazione prenotazione,String descrizione) {
+        this.descrizione = descrizione;
+        this.prenotazione = prenotazione;
+    }
     public Integer getId() {
         return id;
     }
@@ -44,14 +55,6 @@ public class Notifica {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
-    }
-    //costruttore jpa
-    protected Notifica() {
-    }
-    //costruttore con parametri
-    public Notifica(int id, Prenotazione prenoazione) {
-        this.id = id;
-        this.prenotazione = prenoazione;
     }
 
     //to string
