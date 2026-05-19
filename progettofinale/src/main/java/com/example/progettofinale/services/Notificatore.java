@@ -3,6 +3,8 @@ package com.example.progettofinale.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
 import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
@@ -14,6 +16,7 @@ import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.PrenotazioneRepo;
 import com.example.progettofinale.repository.UtenteRepo;
 
+@Service
 public class Notificatore implements Observer {
     private final NotificatoreRepo notificatoreRepo;
     private final PrenotazioneRepo prenotazioneRepo;

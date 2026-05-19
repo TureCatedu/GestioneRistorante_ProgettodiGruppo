@@ -11,8 +11,8 @@ import jakarta.validation.constraints.Size;
 public record PrenotazioneRequest (
     @NotEmpty
     @NotNull
-    @Size(min = 5, max = 20, message = "il nome utente è obbligatorio")
-    Utente utente,
+    @Positive(message = "l'id utente deve essere un numero positivo")
+    Integer utenteId,
     @NotNull
     @Positive(message = "la prenotazione deve avere almeno 1 persona")
     int numeroPersone,

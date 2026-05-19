@@ -8,21 +8,26 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
+import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
+import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.PrenotazioneRepo;
+import com.example.progettofinale.repository.UtenteRepo;
 
 @Service
 public class Ristorante implements Subject {
     private final PrenotazioneRepo prenotazioneRepo;
+    private final UtenteRepo utenteRepo;
     Notificatore notificatore;
 
     // costruttore con parametri per l'injection
-    public Ristorante(PrenotazioneRepo prenotazioneRepo, Notificatore notificatore) {
+    public Ristorante(PrenotazioneRepo prenotazioneRepo, Notificatore notificatore, UtenteRepo utenteRepo) {
         this.prenotazioneRepo = prenotazioneRepo;
         this.notificatore = notificatore;
+        this.utenteRepo = utenteRepo;
     }
 
     List<Observer> observers = new ArrayList<>();
@@ -46,12 +51,13 @@ public class Ristorante implements Subject {
 
     // PrenotazioneRequest to Prenotazione
     Prenotazione prenotazione(PrenotazioneRequest prenotazioneRequest) {
-        return new Prenotazione(prenotazioneRequest.utente(), prenotazioneRequest.numeroPersone(), prenotazioneRequest.dataOra());
+        Utente utente = utenteRepo.findById(prenotazioneRequest.utenteId()).orElseThrow(() -> new UtenteNonTrovatoException(prenotazioneRequest.utenteId()));
+        return new Prenotazione(utente, prenotazioneRequest.numeroPersone(), prenotazioneRequest.dataOra());
     }
 
     // Prenotazione to NotificaResponse
     PrenotazioneResponse prenotazione(Prenotazione prenotazione) {
-        return new PrenotazioneResponse(prenotazione.getId(), prenotazione.getNomeCliente(),
+        return new PrenotazioneResponse(prenotazione.getId(), prenotazione.getCliente().getId(),
                 prenotazione.getNumeroPersone(), prenotazione.getDataOra());
     }
 
@@ -120,8 +126,9 @@ public class Ristorante implements Subject {
         if (prenotazione.isEmpty()) {
             throw new PrenotazioneNonTrovataException(id);
         }
+        Utente utente = utenteRepo.findById(prenotazioneRequest.utenteId()).orElseThrow(() -> new UtenteNonTrovatoException(prenotazioneRequest.utenteId()));
         Prenotazione prenotazioneDb = prenotazione.get();
-        prenotazioneDb.setNomeCliente(prenotazioneRequest.utente());
+        prenotazioneDb.setCliente(utente);
         prenotazioneDb.setNumeroPersone(prenotazioneRequest.numeroPersone());
         prenotazioneDb.setDataOra(prenotazioneRequest.dataOra());
         Prenotazione updated = prenotazioneRepo.save(prenotazioneDb);

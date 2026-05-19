@@ -40,12 +40,11 @@ public class Prenotazione{
         this.dataOra = dataOra;
     }
     
-    public Utente getNomeCliente() {
+    public Utente getCliente() {
         return this.cliente;
     }
-
-    public void setNomeCliente(Utente nomeCliente) {
-        this.cliente = nomeCliente;
+    public void setCliente(Utente cliente) {
+        this.cliente = cliente;
     }
 
     public int getNumeroPersone() {
