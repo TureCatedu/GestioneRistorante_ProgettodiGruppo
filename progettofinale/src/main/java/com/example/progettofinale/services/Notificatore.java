@@ -10,6 +10,7 @@ import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.models.NotificaResponse;
+import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.NotificatoreRepo;
@@ -40,11 +41,12 @@ public class Notificatore implements Observer {
     }
     //da notifica a notificaResponse
     NotificaResponse notifica(Notifica notifica) {
-        return new NotificaResponse(notifica.getId(), notifica.getPrenotazione(), notifica.getDescrizione());
+        return new NotificaResponse(notifica.getId(), notifica.getPrenotazione().getId(), notifica.getDescrizione());
     }
     //da notificaRequest a notifica
     Notifica notifica(NotificaRequest notificaRequest) {
-        return new Notifica(notificaRequest.prenotazione(), notificaRequest.descrizione());
+        Prenotazione prenotazione = prenotazioneRepo.findById(notificaRequest.prenotazioneId()).orElseThrow(() -> new PrenotazioneNonTrovataException(notificaRequest.prenotazioneId()));
+        return new Notifica(prenotazione, notificaRequest.descrizione());
     }
 
     //ottieni notifiche per utente
