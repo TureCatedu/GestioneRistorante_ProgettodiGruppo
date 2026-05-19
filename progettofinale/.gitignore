@@ -1,0 +1,11 @@
+# Ignora le impostazioni e la cartella di VS Code
+.vscode/
+
+# Ignora le cartelle di build dove vengono creati i file compilati (inclusi i test)
+target/
+build/
+bin/
+out/
+
+# (Opzionale) Se intendi proprio il file sorgente Java del test e non vuoi tracciarlo:
+*ApplicationTests.java
