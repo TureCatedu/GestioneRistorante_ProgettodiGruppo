@@ -97,6 +97,7 @@ public class Ristorante implements Subject {
         notifyObservers(new Notifica(updated, "Prenotazione modificata"));
         return prenotazione(updated);
     }
+    
     //cerca per nome cliente
     public List<PrenotazioneResponse> cercaPrenotazionePerNomeCliente(String nomeCliente) {
         List<Prenotazione> prenotazioni = prenotazioneRepo.findByNomeCliente(nomeCliente);
