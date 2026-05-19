@@ -10,18 +10,15 @@ import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
-import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.PrenotazioneRepo;
 
 @Service
 public class Ristorante implements Subject {
     private final  PrenotazioneRepo prenotazioneRepo;
-    private final NotificatoreRepo notificatoreRepo;
     Notificatore notificatore;
     //costruttore con parametri per l'injection
-    public Ristorante(PrenotazioneRepo prenotazioneRepo, NotificatoreRepo notificatoreRepo, Notificatore notificatore) {
+    public Ristorante(PrenotazioneRepo prenotazioneRepo, Notificatore notificatore) {
         this.prenotazioneRepo = prenotazioneRepo;
-        this.notificatoreRepo = notificatoreRepo;
         this.notificatore = notificatore;
     }
     List<Observer> observers = new ArrayList<>();
