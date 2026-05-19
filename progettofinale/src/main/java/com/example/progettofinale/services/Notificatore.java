@@ -62,7 +62,7 @@ public class Notificatore implements Observer {
     //Ottieni tutte le notifiche per un prenotazione
     public List<NotificaResponse> getNotificazioniPerPrenotazione(int idPrenotazione) {
         prenotazioneRepo.findById(idPrenotazione).orElseThrow(() -> new PrenotazioneNonTrovataException(idPrenotazione));
-       
+    
         List<Notifica> notifiche = notificatoreRepo.findByPrenotazioneId(idPrenotazione);
         List<NotificaResponse> notificheResponse = new ArrayList<>();
         for (Notifica notifica : notifiche) {

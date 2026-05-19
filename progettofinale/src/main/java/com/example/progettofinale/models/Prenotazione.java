@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.validation.Valid;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,9 +18,8 @@ public class Prenotazione{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPrenotazione; 
     
-    @NotNull
+    @ManyToOne
     @JoinColumn(name = "utente_id", nullable = false)
-    @Valid
     private Utente cliente;
     
     @NotNull

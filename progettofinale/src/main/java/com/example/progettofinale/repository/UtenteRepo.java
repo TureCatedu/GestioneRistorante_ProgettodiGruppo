@@ -4,20 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 
+@Repository
 public interface UtenteRepo extends JpaRepository<Utente, Integer>
 {
     // Per il Login: ricerca tramite email (essendo univoca)
-    Optional<Utente> findByEmailPassword(String email, String password);
+    Optional<Utente> findByEmailAndPassword(String email, String password);
 
     // Per admin/proprietario: lista di tutti gli utenti di un certo tipo
     List<Utente> findByRuolo(Ruolo ruolo);
 
     // Ricerca per cognome (utile se volete una funzione di "cerca utente")
-    List<Utente> findByCognomeNomeIgnoreCase(String cognome, String nome);
+    List<Utente> findByCognomeAndNomeIgnoreCase(String cognome, String nome);
 }
     
 
