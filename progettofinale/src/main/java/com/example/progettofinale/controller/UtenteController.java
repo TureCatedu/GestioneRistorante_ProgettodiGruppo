@@ -21,7 +21,7 @@ public class UtenteController {
         this.utenteRepo = utenteRepo;
     }
 
-    // GET: trova utente per ID (Staff o l'utente stesso, per ora apriamo a tutti i loggati)
+    // GET: trova utente per ID
     @GetMapping("/{id}") 
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public ResponseEntity<Utente> findById(@PathVariable Integer id) {
@@ -64,7 +64,7 @@ public class UtenteController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // POST: Login (Nessuna annotazione, deve essere accessibile a chi non è ancora loggato)
+    // POST: Login 
     @PostMapping("/login")
     public ResponseEntity<Utente> login(@RequestParam String email, @RequestParam String password) {
         return utenteRepo.findByEmailAndPassword(email, password)
@@ -72,7 +72,7 @@ public class UtenteController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    // POST: Crea un nuovo utente (Nessuna annotazione, serve per la registrazione)
+    // POST: Crea un nuovo utente
     @PostMapping
     public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
         Utente utenteSalvato = utenteRepo.save(nuovoUtente);
