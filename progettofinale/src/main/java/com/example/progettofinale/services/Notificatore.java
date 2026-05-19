@@ -24,12 +24,14 @@ public class Notificatore implements Observer {
     private final NotificatoreRepo notificatoreRepo;
     private final PrenotazioneRepo prenotazioneRepo;
     private final UtenteRepo utenteRepo;
+
     //costruttore con parametri per l'injection
     public Notificatore(NotificatoreRepo notificatoreRepo, PrenotazioneRepo prenotazioneRepo, UtenteRepo utenteRepo) {
         this.notificatoreRepo = notificatoreRepo;
         this.utenteRepo = utenteRepo;
         this.prenotazioneRepo = prenotazioneRepo;
     }
+
     //override update del subject
     @Override
     public void update(Notifica notifica) {
@@ -42,10 +44,12 @@ public class Notificatore implements Observer {
             notificatoreRepo.save(notificaDb);
         }
     }
+
     //da notifica a notificaResponse
     NotificaResponse toNotificaResponse(Notifica notifica) {
         return new NotificaResponse(notifica.getId(), notifica.getPrenotazione().getId(), notifica.getDescrizione());
     }
+
     //da notificaRequest a notifica
     Notifica toNotifica(NotificaRequest notificaRequest) {
         Prenotazione prenotazione = prenotazioneRepo.findById(notificaRequest.prenotazioneId()).orElseThrow(() -> new PrenotazioneNonTrovataException(notificaRequest.prenotazioneId()));
@@ -62,6 +66,7 @@ public class Notificatore implements Observer {
         }
         return notificheResponse;
     }
+
     //Ottieni tutte le notifiche per una prenotazione
     public List<NotificaResponse> getNotificazioniPerPrenotazione(int idPrenotazione) {
         prenotazioneRepo.findById(idPrenotazione).orElseThrow(() -> new PrenotazioneNonTrovataException(idPrenotazione));
@@ -73,6 +78,7 @@ public class Notificatore implements Observer {
         }
         return notificheResponse;
     }
+
     //Ottieni tutte le notifiche
     public List<NotificaResponse> getNotificazioni() {
         List<Notifica> notifiche = notificatoreRepo.findAll();
@@ -82,6 +88,7 @@ public class Notificatore implements Observer {
         }
         return notificheResponse;
     }
+    
     //cancella notiche di un utente
     public void cancellaNotifichePerUtente(int idUtente) {
         utenteRepo.findById(idUtente).orElseThrow(() -> new UtenteNonTrovatoException(idUtente));
