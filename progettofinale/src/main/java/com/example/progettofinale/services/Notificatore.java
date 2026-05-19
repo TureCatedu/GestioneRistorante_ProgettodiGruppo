@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.models.NotificaResponse;
+import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.NotificatoreRepo;
 import com.example.progettofinale.repository.UtenteRepo;
@@ -20,7 +21,14 @@ public class Notificatore implements Observer {
     }
     @Override
     public void update(Notifica notifica) {
-
+        List<Utente> utenti = utenteRepo.findByRuolo(Ruolo.AMMINISTRATORE);
+        utenti.addAll(utenteRepo.findByRuolo(Ruolo.CAMERIERE));
+        Notifica notificaDb = new Notifica(notifica.getPrenotazione(), notifica.getDescrizione());
+        
+        for (Utente utente : utenti) {
+            notificaDb.setUtente(utenteRepo.findById(utente.getId()).orElse(null));
+            notificatoreRepo.save(notificaDb);
+        }
     }
     //da notifica a notificaResponse
     public NotificaResponse notifica(Notifica notifica) {
