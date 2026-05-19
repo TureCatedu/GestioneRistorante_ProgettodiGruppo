@@ -1,5 +1,6 @@
 package com.example.progettofinale.controller;
 
+import com.example.progettofinale.models.LoginRequest;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
@@ -59,8 +60,8 @@ public class UtenteController {
 
     // POST: Login
     @PostMapping("/login")
-    public ResponseEntity<Utente> login(@RequestParam String email, @RequestParam String password) {
-        return utenteRepo.findByEmailAndPassword(email, password)
+    public ResponseEntity<Utente> login(@RequestBody LoginRequest request) {
+        return utenteRepo.findByEmailAndPassword(request.email(), request.password())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
