@@ -31,11 +31,11 @@ public class Notificatore implements Observer {
         }
     }
     //da notifica a notificaResponse
-    public NotificaResponse notifica(Notifica notifica) {
+    NotificaResponse notifica(Notifica notifica) {
         return new NotificaResponse(notifica.getId(), notifica.getPrenotazione(), notifica.getDescrizione());
     }
     //da notificaRequest a notifica
-    public Notifica notifica(NotificaRequest notificaRequest) {
+    Notifica notifica(NotificaRequest notificaRequest) {
         return new Notifica(notificaRequest.prenotazione(), notificaRequest.descrizione());
     }
 
