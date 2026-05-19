@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ public class Prenotazione{
     private Integer idPrenotazione; 
     
     @NotNull
+    @JoinColumn(name = "utente_id", nullable = false)
     @Valid
     private Utente cliente;
     
