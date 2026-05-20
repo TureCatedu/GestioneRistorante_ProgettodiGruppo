@@ -6,9 +6,13 @@ import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.http.HttpStatus;
@@ -83,7 +87,7 @@ public class UtenteController {
     // GET: Ottieni il profilo appena loggato 
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
-    public String getMioProfilo(org.springframework.security.core.Authentication authentication,
+    public String getMioProfilo(Authentication authentication,
                                 Model model) {
 
         Utente utente = utenteRepo.findByEmail(authentication.getName()).orElse(null);
@@ -93,6 +97,18 @@ public class UtenteController {
         return "profilo";
     }
 
+    // GET: Effettua il logout dell'utente corrente
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        // Se c'è un utente loggato, Spring Security gestisce la pulizia della sessione
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        // Dopo il logout, reindirizziamo l'utente alla pagina di login (o alla home)
+        return "redirect:/login"; 
+    }
     // POST: Login 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request,

@@ -2,10 +2,13 @@ package com.example.progettofinale.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.progettofinale.models.NotificaResponse;
+import com.example.progettofinale.models.Utente;
+import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.NotificatoreFacade;
 
 import java.util.List;
@@ -15,9 +18,11 @@ import java.util.List;
 public class NotificatoreController {
     
     private final NotificatoreFacade notificatoreFacade;
+    private final UtenteRepo utenteRepo;
 
-    public NotificatoreController(NotificatoreFacade notificatoreFacade) {
+    public NotificatoreController(NotificatoreFacade notificatoreFacade, UtenteRepo utenteRepo) {
         this.notificatoreFacade = notificatoreFacade;
+        this.utenteRepo = utenteRepo;
     }
 
     // Ottieni tutte le notifiche (Solo Admin)
@@ -34,12 +39,13 @@ public class NotificatoreController {
     }
 
     // Ottieni notifiche per Utente (Tutti i ruoli autenticati)
-    @GetMapping("/utente/{idUtente}")
+    @GetMapping("/utente/me")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String getNotifichePerUtente(
-        @PathVariable int idUtente,
+        Authentication authentication,
         Model model) {
-
+        Utente utente = utenteRepo.findByEmail(authentication.getName()).orElse(null);
+        Integer idUtente = utente.getId();
         List<NotificaResponse> notifiche =
                 notificatoreFacade.getNotifichePerUtente(idUtente);
 
