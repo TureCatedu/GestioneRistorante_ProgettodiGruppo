@@ -6,8 +6,4 @@ public record LoginResponse(
     String cognome,
     String email,
     Ruolo ruolo
-<<<<<<< HEAD
 ) {}
-=======
-) {}
->>>>>>> front-end

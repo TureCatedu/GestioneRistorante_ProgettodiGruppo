@@ -20,16 +20,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< HEAD
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        // Solo la registrazione di un nuovo utente è pubblica a tutti
-                        .requestMatchers(HttpMethod.POST, "/api/utenti").permitAll()
-                        // Tutte le altre richieste richiedono l'autenticazione
-                        .anyRequest().authenticated())
-                // Attiva la HTTP Basic Authentication
-                .httpBasic(Customizer.withDefaults());
-=======
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register", "/css/**").permitAll()
@@ -47,9 +37,6 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .permitAll()
             );
-            // Attiva la HTTP Basic Authentication
-            //.httpBasic(Customizer.withDefaults()); 
->>>>>>> front-end
 
         return http.build();
     }
@@ -65,10 +52,6 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato: " + email));
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
