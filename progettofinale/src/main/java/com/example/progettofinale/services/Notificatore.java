@@ -19,7 +19,7 @@ import com.example.progettofinale.repository.UtenteRepo;
 
 //service per gestione notifiche
 @Service
-public class Notificatore implements Observer {
+class Notificatore implements Observer {
     //attributi per injection
     private final NotificatoreRepo notificatoreRepo;
     private final PrenotazioneRepo prenotazioneRepo;
