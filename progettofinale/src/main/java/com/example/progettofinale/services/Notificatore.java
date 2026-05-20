@@ -100,4 +100,8 @@ class Notificatore implements Observer {
         Notifica notificaDb = notificatoreRepo.save(notifica);
         return toNotificaResponse(notificaDb);
     }
+    //cancella notifiche per id
+    void cancellaNotifica(int id) {
+        notificatoreRepo.deleteById(id);
+    }
 }

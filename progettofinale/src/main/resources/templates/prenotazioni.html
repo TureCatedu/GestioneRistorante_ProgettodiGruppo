@@ -30,6 +30,17 @@
             <td th:text="${p.clienteId}" th:id="'p-utente-' + ${p.id}"></td>
             <td th:text="${p.numeroPersone}" th:id="'p-persone-' + ${p.id}"></td>
             <td th:text="${p.dataOra}" th:id="'p-data-' + ${p.id}"></td>
+            <td>
+                <form th:action="@{/prenotazioni/{id}(id=${p.id})}" method="post" 
+                      th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare la prenotazione ID ' + ${p.id} + '?\');'">
+                    
+                    <input type="hidden" name="_method" value="DELETE" />
+                    
+                    <button type="submit" style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">
+                        Elimina
+                    </button>
+                </form>
+            </td>
         </tr>
 
     </tbody>

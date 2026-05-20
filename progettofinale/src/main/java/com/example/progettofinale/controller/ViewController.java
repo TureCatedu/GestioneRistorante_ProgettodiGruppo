@@ -29,4 +29,8 @@ public class ViewController {
     public String error() {
         return "error";
     }
+    @GetMapping("/prenotazioni/nuova")
+    public String nuovaPrenotazione() {
+        return "nuova-prenotazione";
+    }
 }
