@@ -2,6 +2,7 @@ package com.example.progettofinale.services;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.example.progettofinale.models.PrenotazioneRequest;
@@ -11,7 +12,7 @@ import com.example.progettofinale.models.PrenotazioneResponse;
 @Component
 public class RistoranteFacade {
     private Ristorante ristorante;
-    //costruttore con parametri per l'injection
+    
     public RistoranteFacade(Ristorante ristorante) {
         this.ristorante = ristorante;
     }
@@ -54,4 +55,16 @@ public class RistoranteFacade {
     public List<PrenotazioneResponse> cercaPrenotazionePerNomeCliente(String nome, String cognome) {
         return ristorante.cercaPrenotazionePerNomeCliente(nome, cognome);
     }
+
+    //verifica se la prenotazione appartiene al cliente
+    public boolean verificaProprietaPrenotazione(Integer idPrenotazione, String emailCliente) {
+        return ristorante.verificaProprietaPrenotazione(idPrenotazione, emailCliente);
+    }
+
+    // verifica se l'utente è un cliente
+    public boolean isCliente(Authentication authentication) {
+        return ristorante.isCliente(authentication);
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.progettofinale.models;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +24,10 @@ public class Utente {
 
     @Column(nullable = false, length = 255)
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "idPrenotazione")
+    private List<Prenotazione> prenotazione;
 
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
@@ -80,5 +86,13 @@ public class Utente {
 
     public void setRuolo(Ruolo ruolo) {
         this.ruolo = ruolo;
+    }
+
+    public List<Prenotazione> getPrenotazioni() {
+        return prenotazione;
+    }
+
+    public void setPrenotazioni(List<Prenotazione> prenotazione) {
+        this.prenotazione = prenotazione;
     }
 }
