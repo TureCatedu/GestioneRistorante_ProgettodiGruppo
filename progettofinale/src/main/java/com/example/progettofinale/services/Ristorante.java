@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
@@ -151,4 +152,18 @@ class Ristorante implements Subject {
         return prenotazioniResponse;
     }
 
+    // verifica proprietario prenotazione
+
+    public boolean verificaProprietaPrenotazione(Integer idPrenotazione, String emailUtente) {
+        return utenteRepo.findByEmail(emailUtente)
+                .map(utente -> utente.getPrenotazioni().stream()
+                .anyMatch(prenotazione -> idPrenotazione.equals(prenotazione.getId()))) 
+                .orElse(false);
+    }
+
+    // verifica se l'utente è un cliente
+    public boolean isCliente(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLIENTE"));
+    }
 }

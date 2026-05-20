@@ -3,12 +3,20 @@ package com.example.progettofinale.errorResponse;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 //gestore di errori globali
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    // GESTIONE ERRORE ACCESSO NEGATO
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        ErrorResponse errorResponse = new ErrorResponse(403, "Accesso negato: " + e.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(403).body(errorResponse);
+    }
     //gestione errori generici
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {

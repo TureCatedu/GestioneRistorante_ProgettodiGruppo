@@ -154,7 +154,7 @@ public class UtenteController {
 
         return "redirect:/utenti";
     }
-
+    
     // DELETE: Rimuove un utente per ID (Solo Admin)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
