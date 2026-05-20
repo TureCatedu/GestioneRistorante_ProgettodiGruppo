@@ -2,7 +2,8 @@ package com.example.progettofinale.controller;
 
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
-import com.example.progettofinale.services.Ristorante;
+import com.example.progettofinale.services.RistoranteFacade;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,9 @@ import java.util.List;
 @RequestMapping("/api/prenotazione")
 public class PrenotazioneController {
 
-    private final Ristorante ristorante;
+    private final RistoranteFacade ristorante;
 
-    public PrenotazioneController(Ristorante ristorante) {
+    public PrenotazioneController(RistoranteFacade ristorante) {
         this.ristorante = ristorante;
     }
 

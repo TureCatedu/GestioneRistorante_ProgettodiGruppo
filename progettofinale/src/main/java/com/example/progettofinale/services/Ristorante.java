@@ -19,7 +19,7 @@ import com.example.progettofinale.repository.UtenteRepo;
 
 //service per gestione prenotazioni
 @Service
-public class Ristorante implements Subject {
+class Ristorante implements Subject {
     //attributi per injection
     private final PrenotazioneRepo prenotazioneRepo;
     private final UtenteRepo utenteRepo;
