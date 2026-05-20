@@ -4,7 +4,6 @@ import com.example.progettofinale.repository.UtenteRepo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +20,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+<<<<<<< HEAD
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Solo la registrazione di un nuovo utente è pubblica a tutti
@@ -29,6 +29,27 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 // Attiva la HTTP Basic Authentication
                 .httpBasic(Customizer.withDefaults());
+=======
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/register", "/css/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/utenti").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/perform_login")  
+                .permitAll()
+            )
+
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .permitAll()
+            );
+            // Attiva la HTTP Basic Authentication
+            //.httpBasic(Customizer.withDefaults()); 
+>>>>>>> front-end
 
         return http.build();
     }
@@ -44,6 +65,10 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato: " + email));
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -4,14 +4,15 @@ import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
 import com.example.progettofinale.services.RistoranteFacade;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/prenotazione")
+@Controller
+@RequestMapping("/prenotazioni")
 public class PrenotazioneController {
 
     private final RistoranteFacade ristorante;
@@ -23,80 +24,97 @@ public class PrenotazioneController {
     // Ricerca per ID (Accessibile a tutti)
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
-    public ResponseEntity<PrenotazioneResponse> findById(@PathVariable Integer id) {
+    public String findById(@PathVariable Integer id, Model model) {
+
         PrenotazioneResponse response = ristorante.cercaPrenotazione(id);
-        return (response != null) ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
+
+        model.addAttribute("prenotazione", response);
+
+        return "prenotazione";
     }
 
     // Ottieni tutte le prenotazioni (Solo staff)
     @GetMapping
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
-    public ResponseEntity<List<PrenotazioneResponse>> findAll() {
-        return ResponseEntity.ok(ristorante.getPrenotazioni());
+    public String listaPrenotazioni(Model model) {
+
+        model.addAttribute(
+                "prenotazioni",
+                ristorante.getPrenotazioni()
+        );
+
+        return "prenotazioni";
     }
 
     // Ricerca per Nome e Cognome (Solo staff)
     @GetMapping("/cerca")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
-    public ResponseEntity<List<PrenotazioneResponse>> findByCliente(
+    public String findByCliente(
             @RequestParam String nome,
-            @RequestParam String cognome) {
-        List<PrenotazioneResponse> list = ristorante.cercaPrenotazionePerNomeCliente(nome, cognome);
-        return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
-    }
+            @RequestParam String cognome,
+            Model model) {
 
+        List<PrenotazioneResponse> list =
+                ristorante.cercaPrenotazionePerNomeCliente(nome, cognome);
+
+        model.addAttribute("prenotazioni", list);
+
+        return "prenotazioni";
+    }
     // cerca prenotazioni per giorno corrente (Solo staff)
     @GetMapping("/oggi")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
-    public ResponseEntity<List<PrenotazioneResponse>> findPrenotazioniOggi() {
-        List<PrenotazioneResponse> list = ristorante.getPrenotazioniOggi();
-        return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
-    }
+    public String findPrenotazioniOggi(Model model) {
 
+        List<PrenotazioneResponse> list =
+                ristorante.getPrenotazioniOggi();
+
+        model.addAttribute("prenotazioni", list);
+
+        return "prenotazioni";
+    }
     // cerca per data (Solo staff)
     @GetMapping("/cerca-data")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
-    public ResponseEntity<List<PrenotazioneResponse>> findByData(@RequestParam String data) {
-        List<PrenotazioneResponse> list = ristorante.cercaPrenotazionePerData(data);
-        return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
-    }
+    public String findByData(@RequestParam String data, Model model) {
 
+        List<PrenotazioneResponse> list =
+                ristorante.cercaPrenotazionePerData(data);
+
+        model.addAttribute("prenotazioni", list);
+
+        return "prenotazioni";
+    }
     // Inserimento Prenotazione (Tutti)
     @PostMapping
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
-    public ResponseEntity<?> aggiungiPrenotazione(@RequestBody PrenotazioneRequest request) {
-        try {
-            PrenotazioneResponse response = ristorante.aggiungiPrenotazione(request);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public String aggiungiPrenotazione(PrenotazioneRequest request) {
+
+        ristorante.aggiungiPrenotazione(request);
+
+        return "redirect:/prenotazioni";
     }
+
 
     // Modifica Prenotazione (Tutti)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
-    public ResponseEntity<?> modificaPrenotazione(@PathVariable Integer id, @RequestBody PrenotazioneRequest request) {
-        try {
-            PrenotazioneResponse response = ristorante.modificaPrenotazione(id, request);
-            if (response == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public String modificaPrenotazione(
+            @PathVariable Integer id,
+            PrenotazioneRequest request) {
+
+        ristorante.modificaPrenotazione(id, request);
+
+        return "redirect:/prenotazioni";
     }
 
     // Cancellazione Prenotazione (Tutti)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
-    public ResponseEntity<Void> eliminaPrenotazione(@PathVariable Integer id) {
-        PrenotazioneResponse esistente = ristorante.cercaPrenotazione(id);
-        if (esistente == null) {
-            return ResponseEntity.notFound().build();
-        }
+    public String eliminaPrenotazione(@PathVariable Integer id) {
+
         ristorante.eliminaPrenotazione(id);
-        return ResponseEntity.noContent().build();
+
+        return "redirect:/prenotazioni";
     }
 }
