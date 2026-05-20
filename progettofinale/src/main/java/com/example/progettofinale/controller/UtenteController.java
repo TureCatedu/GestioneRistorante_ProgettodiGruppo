@@ -8,6 +8,7 @@ import com.example.progettofinale.repository.UtenteRepo;
 
 import java.util.List;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class UtenteController {
     
     private final UtenteRepo utenteRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UtenteController(UtenteRepo utenteRepo) {
+    public UtenteController(UtenteRepo utenteRepo, PasswordEncoder passwordEncoder) {
         this.utenteRepo = utenteRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // GET: trova utente per ID
@@ -66,28 +69,31 @@ public class UtenteController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
+        // Cripta la password prima di passarla al database
+        String passwordCriptata = passwordEncoder.encode(nuovoUtente.getPassword());
+        nuovoUtente.setPassword(passwordCriptata);
+        
+        Utente utenteSalvato = utenteRepo.save(nuovoUtente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); 
+    }
+
     // POST: Login 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return utenteRepo.findByEmailAndPassword(request.email(), request.password())
+        return utenteRepo.findByEmail(request.email())
+                .filter(u -> passwordEncoder.matches(request.password(), u.getPassword())) // Compara le password
                 .map(u -> ResponseEntity.ok(new LoginResponse(
                     u.getId(),
                     u.getNome(),
                     u.getCognome(),
                     u.getEmail(),
                     u.getRuolo()
-                )
-            ))
-            .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+                )))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
-
-    // POST: Crea un nuovo utente
-    @PostMapping
-    public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
-        Utente utenteSalvato = utenteRepo.save(nuovoUtente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); 
-    }
-
+    
     // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
