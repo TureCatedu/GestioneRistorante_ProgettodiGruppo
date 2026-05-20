@@ -1,12 +1,14 @@
 package com.example.progettofinale.controller;
 
 import com.example.progettofinale.models.LoginRequest;
+import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
 
 import java.util.List;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class UtenteController {
     
     private final UtenteRepo utenteRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UtenteController(UtenteRepo utenteRepo) {
+
+    public UtenteController(UtenteRepo utenteRepo, PasswordEncoder passwordEncoder) {
         this.utenteRepo = utenteRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // GET: trova utente per ID
@@ -90,13 +95,19 @@ public class UtenteController {
 
     // POST: Login 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
+    public String login(@RequestBody LoginRequest request,
                         Model model) {
 
-        Utente utente = utenteRepo.findByEmailAndPassword(email, password).orElse(null);
+        LoginResponse loginResponse = utenteRepo.findByEmail(request.email())
+                .filter(u -> passwordEncoder.matches(request.password(), u.getPassword())).map(u ->new LoginResponse(
+                    u.getId(),
+                    u.getNome(),
+                    u.getCognome(),
+                    u.getEmail(),
+                    u.getRuolo()
+                )).orElseGet(() -> new LoginResponse(null, null, null, null, null));
 
-        model.addAttribute("utente", utente);
+        model.addAttribute("utente", loginResponse);
 
         return "profilo";
     }
@@ -104,7 +115,8 @@ public class UtenteController {
     // POST: Crea un nuovo utente
     @PostMapping
     public String createUtente(Utente nuovoUtente) {
-
+        String passwordCriptata = passwordEncoder.encode(nuovoUtente.getPassword());
+        nuovoUtente.setPassword(passwordCriptata);
         utenteRepo.save(nuovoUtente);
 
         return "redirect:/utenti";
