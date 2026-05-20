@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notifiche</title>
+</head>
+
+<body id="body-notifiche">
+
+<header id="header-notifiche">
+    <h1 id="title-notifiche">Notifiche</h1>
+</header>
+
+<main id="main-notifiche">
+
+<table id="table-notifiche">
+
+    <thead id="thead-notifiche">
+        <tr>
+            <th>ID</th>
+            <th>Messaggio</th>
+        </tr>
+    </thead>
+
+    <tbody id="tbody-notifiche">
+
+        <tr th:each="n : ${notifiche}" th:id="'notifica-' + ${n.id}">
+            <td th:text="${n.id}" th:id="'n-id-' + ${n.id}"></td>
+            <td th:text="${n.messaggio}" th:id="'n-msg-' + ${n.id}"></td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+</main>
+
+</body>
+</html>

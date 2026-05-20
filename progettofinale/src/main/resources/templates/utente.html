@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Utente</title>
+</head>
+
+<body id="body-utente">
+
+<header id="header-utente">
+    <h1 id="title-utente">Dettaglio Utente</h1>
+</header>
+
+<main id="main-utente">
+
+<div id="utente-container" th:if="${utente != null}">
+
+    <p id="utente-nome" th:text="${utente.nome}"></p>
+    <p id="utente-cognome" th:text="${utente.cognome}"></p>
+    <p id="utente-email" th:text="${utente.email}"></p>
+    <p id="utente-ruolo" th:text="${utente.ruolo}"></p>
+
+</div>
+
+<div id="utente-not-found" th:if="${utente == null}">
+    Utente non trovato
+</div>
+
+</main>
+
+</body>
+</html>

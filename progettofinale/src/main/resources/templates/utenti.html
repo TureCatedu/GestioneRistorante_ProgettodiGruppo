@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Utenti</title>
+</head>
+
+<body id="body-utenti">
+
+<header id="header-utenti">
+    <h1 id="title-utenti">Lista Utenti</h1>
+</header>
+
+<main id="main-utenti">
+
+<table id="table-utenti">
+
+    <thead id="thead-utenti">
+        <tr id="row-header-utenti">
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Email</th>
+            <th>Ruolo</th>
+        </tr>
+    </thead>
+
+    <tbody id="tbody-utenti">
+
+        <tr th:each="u : ${utenti}" th:id="'utente-' + ${u.id}">
+            <td th:text="${u.id}" th:id="'utente-id-' + ${u.id}"></td>
+            <td th:text="${u.nome}" th:id="'utente-nome-' + ${u.id}"></td>
+            <td th:text="${u.cognome}" th:id="'utente-cognome-' + ${u.id}"></td>
+            <td th:text="${u.email}" th:id="'utente-email-' + ${u.id}"></td>
+            <td th:text="${u.ruolo}" th:id="'utente-ruolo-' + ${u.id}"></td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+</main>
+
+</body>
+</html>

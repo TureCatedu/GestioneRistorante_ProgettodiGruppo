@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prenotazione</title>
+</head>
+
+<body id="body-prenotazione">
+
+<header id="header-prenotazione">
+    <h1 id="title-prenotazione">Dettaglio Prenotazione</h1>
+</header>
+
+<main id="main-prenotazione">
+
+<div id="prenotazione-container" th:if="${prenotazione != null}">
+
+    <p id="prenotazione-id" th:text="${prenotazione.id}"></p>
+    <p id="prenotazione-persone" th:text="${prenotazione.numeroPersone}"></p>
+    <p id="prenotazione-data" th:text="${prenotazione.dataOra}"></p>
+
+</div>
+
+<div id="prenotazione-not-found" th:if="${prenotazione == null}">
+    Prenotazione non trovata
+</div>
+
+</main>
+
+</body>
+</html>

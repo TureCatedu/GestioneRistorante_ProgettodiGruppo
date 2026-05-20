@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prenotazioni</title>
+</head>
+
+<body id="body-prenotazioni">
+
+<header id="header-prenotazioni">
+    <h1 id="title-prenotazioni">Prenotazioni</h1>
+</header>
+
+<main id="main-prenotazioni">
+
+<table id="table-prenotazioni">
+
+    <thead id="thead-prenotazioni">
+        <tr>
+            <th>ID</th>
+            <th>Utente</th>
+            <th>Persone</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+
+    <tbody id="tbody-prenotazioni">
+
+        <tr th:each="p : ${prenotazioni}" th:id="'prenotazione-' + ${p.id}">
+            <td th:text="${p.id}" th:id="'p-id-' + ${p.id}"></td>
+            <td th:text="${p.clienteId}" th:id="'p-utente-' + ${p.id}"></td>
+            <td th:text="${p.numeroPersone}" th:id="'p-persone-' + ${p.id}"></td>
+            <td th:text="${p.dataOra}" th:id="'p-data-' + ${p.id}"></td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+</main>
+
+</body>
+</html>

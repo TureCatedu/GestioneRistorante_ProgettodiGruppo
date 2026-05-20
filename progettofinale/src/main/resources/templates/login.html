@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+
+<body id="body-login">
+
+<header id="header-login">
+    <h1 id="title-login">Login</h1>
+</header>
+
+<main id="main-login">
+
+<form id="form-login" th:action="@{/perform_login}" method="post">
+
+    <input id="input-email" name="email" placeholder="Email">
+    <input id="input-password" name="password" placeholder="Password">
+
+    <button id="btn-login" type="submit">Login</button>
+
+</form>
+
+</main>
+
+</body>
+</html>

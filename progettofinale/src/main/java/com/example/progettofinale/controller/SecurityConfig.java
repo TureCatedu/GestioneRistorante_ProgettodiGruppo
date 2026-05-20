@@ -21,13 +21,24 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Solo la registrazione di un nuovo utente è pubblica a tutti
-                .requestMatchers(HttpMethod.POST, "/api/utenti").permitAll() 
-                // Tutte le altre richieste richiedono l'autenticazione
-                .anyRequest().authenticated() 
+                .requestMatchers("/login", "/register", "/css/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/utenti").permitAll()
+                .anyRequest().authenticated()
             )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/perform_login")  
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            )
+
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .permitAll()
+            );
             // Attiva la HTTP Basic Authentication
-            .httpBasic(Customizer.withDefaults()); 
+            //.httpBasic(Customizer.withDefaults()); 
 
         return http.build();
     }
