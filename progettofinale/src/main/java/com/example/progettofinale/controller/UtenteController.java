@@ -10,18 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
-<<<<<<< HEAD
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-=======
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
->>>>>>> front-end
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +27,6 @@ public class UtenteController {
     private final UtenteRepo utenteRepo;
     private final PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> front-end
     public UtenteController(UtenteRepo utenteRepo, PasswordEncoder passwordEncoder) {
         this.utenteRepo = utenteRepo;
         this.passwordEncoder = passwordEncoder;
@@ -69,8 +60,8 @@ public class UtenteController {
     @GetMapping("/cognome-nome")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public String findByCognomeNome(@RequestParam String cognome,
-                                     @RequestParam String nome,
-                                     Model model) {
+                                    @RequestParam String nome,
+                                    Model model) {
 
         List<Utente> utenti =
                 utenteRepo.findByCognomeAndNomeIgnoreCase(cognome, nome);
@@ -84,7 +75,7 @@ public class UtenteController {
     @GetMapping("/ruolo")
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public String findByRuolo(@RequestParam Ruolo ruolo,
-                              Model model) {
+                            Model model) {
 
         List<Utente> utenti = utenteRepo.findByRuolo(ruolo);
 
@@ -105,17 +96,6 @@ public class UtenteController {
         return "profilo";
     }
 
-<<<<<<< HEAD
-    @PostMapping
-    public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
-        // Cripta la password prima di passarla al database
-        String passwordCriptata = passwordEncoder.encode(nuovoUtente.getPassword());
-        nuovoUtente.setPassword(passwordCriptata);
-        
-        Utente utenteSalvato = utenteRepo.save(nuovoUtente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); 
-    }
-
     // POST: Login 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -130,8 +110,7 @@ public class UtenteController {
                 )))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
-    
-=======
+
     // GET: Effettua il logout dell'utente corrente
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -172,12 +151,12 @@ public class UtenteController {
 
         return "redirect:/utenti";
     }
->>>>>>> front-end
+
     // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String updateUtente(@PathVariable Integer id,
-                               Utente utenteAggiornato) {
+                            Utente utenteAggiornato) {
 
         Utente utenteEsistente = utenteRepo.findById(id).orElse(null);
 

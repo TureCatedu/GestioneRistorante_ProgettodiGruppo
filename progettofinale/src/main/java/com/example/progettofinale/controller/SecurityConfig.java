@@ -20,7 +20,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< HEAD
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Solo la registrazione di un nuovo utente è pubblica a tutti
@@ -29,7 +28,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 // Attiva la HTTP Basic Authentication
                 .httpBasic(Customizer.withDefaults());
-=======
+
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register", "/css/**").permitAll()
@@ -49,8 +48,6 @@ public class SecurityConfig {
             );
             // Attiva la HTTP Basic Authentication
             //.httpBasic(Customizer.withDefaults()); 
->>>>>>> front-end
-
         return http.build();
     }
 
