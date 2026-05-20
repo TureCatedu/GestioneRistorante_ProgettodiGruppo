@@ -13,6 +13,7 @@ public class NotificatoreFacade {
 
     private final Notificatore notificatore;
 
+    //Injection di notificatore per poterne recuperare i metodi
     public NotificatoreFacade(Notificatore notificatore) {
         this.notificatore = notificatore;
     }
