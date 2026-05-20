@@ -10,15 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
-<<<<<<< HEAD
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-=======
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
->>>>>>> front-end
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,10 +25,6 @@ public class UtenteController {
     private final UtenteRepo utenteRepo;
     private final PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> front-end
     public UtenteController(UtenteRepo utenteRepo, PasswordEncoder passwordEncoder) {
         this.utenteRepo = utenteRepo;
         this.passwordEncoder = passwordEncoder;
@@ -105,33 +94,6 @@ public class UtenteController {
         return "profilo";
     }
 
-<<<<<<< HEAD
-    @PostMapping
-    public ResponseEntity<Utente> createUtente(@RequestBody Utente nuovoUtente) {
-        // Cripta la password prima di passarla al database
-        String passwordCriptata = passwordEncoder.encode(nuovoUtente.getPassword());
-        nuovoUtente.setPassword(passwordCriptata);
-        
-        Utente utenteSalvato = utenteRepo.save(nuovoUtente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(utenteSalvato); 
-    }
-
-    // POST: Login 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return utenteRepo.findByEmail(request.email())
-                .filter(u -> passwordEncoder.matches(request.password(), u.getPassword())) // Compara le password
-                .map(u -> ResponseEntity.ok(new LoginResponse(
-                    u.getId(),
-                    u.getNome(),
-                    u.getCognome(),
-                    u.getEmail(),
-                    u.getRuolo()
-                )))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-    
-=======
     // GET: Effettua il logout dell'utente corrente
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -172,7 +134,6 @@ public class UtenteController {
 
         return "redirect:/utenti";
     }
->>>>>>> front-end
     // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
