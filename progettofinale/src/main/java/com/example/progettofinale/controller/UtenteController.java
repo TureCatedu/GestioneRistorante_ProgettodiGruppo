@@ -89,7 +89,7 @@ public class UtenteController {
 
         Utente utente = utenteRepo.findByEmail(authentication.getName()).orElse(null);
 
-        model.addAttribute("utente", utente);
+        model.addAttribute("utenteLoggato", utente);
 
         return "profilo";
     }
@@ -122,7 +122,7 @@ public class UtenteController {
 
         model.addAttribute("utente", loginResponse);
 
-        return "profilo";
+        return "redirect:/";
     }
 
     // POST: Crea un nuovo utente
@@ -132,7 +132,7 @@ public class UtenteController {
         nuovoUtente.setPassword(passwordCriptata);
         utenteRepo.save(nuovoUtente);
 
-        return "redirect:/utenti";
+        return "redirect:/login";
     }
     // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")

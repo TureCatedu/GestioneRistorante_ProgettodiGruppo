@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Home</title>
 </head>
-
 <body id="body-index">
 
 <header id="header-index">
     <h1 id="title-index">HOME</h1>
+    <div sec:authorize="isAuthenticated()" style="text-align: right; padding: 10px;">
+        Benvenuto, <span sec:authentication="name">Utente</span> | 
+        <a href="/logout" style="color: red;">Logout</a>
+    </div>
 </header>
 
 <nav id="nav-index">
-    <a id="link-utenti" href="/utenti">Utenti</a>
-    <a id="link-prenotazioni" href="/prenotazioni">Prenotazioni</a>
-    <a id="link-notifiche" href="/notificatore/utente/me">Notifiche</a>
-    <a id="link-utenti" href="/utenti/logout">Logout</a>
+    <a id="link-utenti" href="/utenti" sec:authorize="hasAuthority('AMMINISTRATORE')">Utenti</a>
+    
+    <a id="link-prenotazioni" href="/prenotazioni" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')">Visualizza Prenotazioni</a>
+    
+    <a id="link-nuova-prenotazione" href="/prenotazioni/nuova" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Nuova Prenotazione</a>
+    <a id="link-notifiche" href="/notificatore/utente/me" sec:authorize="isAuthenticated()">Notifiche</a>
+    <a id="link-profilo" href="/utenti/me" sec:authorize="isAuthenticated()">Il mio Profilo</a>
+    <a id="link-login" href="/logout" sec:authorize="isAnonymous()">logout</a>
 </nav>
 
 <main id="main-index">
-
 </main>
 
 </body>

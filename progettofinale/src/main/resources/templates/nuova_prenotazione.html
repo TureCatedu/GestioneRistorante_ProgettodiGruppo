@@ -13,8 +13,7 @@
 
     <form id="form-nuova-prenotazione" action="/prenotazioni" method="post">
 
-        <label for="input-utente-id">ID Utente:</label>
-        <input type="number" id="input-utente-id" name="utenteId" placeholder="Inserisci il tuo ID Utente" required>
+        <input type="hidden" id="input-utente-id" name="utenteId" th:value="${utenteLoggatoId}" required>
 
         <label for="input-persone">Numero Persone:</label>
         <input type="number" id="input-persone" name="numeroPersone" placeholder="Numero di ospiti" min="1" required>

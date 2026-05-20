@@ -11,7 +11,21 @@
 </header>
 
 <main id="main-notifiche">
-
+<div id="div-cancella-tutte" style="margin-bottom: 20px; padding: 15px; border: 1px dashed #333; background-color: #f9f9f9;">
+    <h3 style="margin-top: 0; color: #333;">Centro Notifiche Personalizzato</h3>
+    
+    <form action="/notificatore/utente/me" method="post" 
+          onsubmit="return confirm('Sei sicuro di voler cancellare TUTTE le tue notifiche? L\'azione è irreversibile.');">
+        
+        <input type="hidden" name="_method" value="delete" />
+        
+        <p>Cliccando sul pulsante eliminerai definitivamente l'intero storico delle tue notifiche personali.</p>
+        
+        <button type="submit" style="color: white; background-color: darkred; border: none; padding: 8px 16px; cursor: pointer; font-weight: bold;">
+            Svuota le mie Notifiche
+        </button>
+    </form>
+</div>
 <table id="table-notifiche">
 
     <thead id="thead-notifiche">
@@ -25,14 +39,39 @@
 
         <tr th:each="n : ${notifiche}" th:id="'notifica-' + ${n.id}">
             <td th:text="${n.id}" th:id="'n-id-' + ${n.id}"></td>
-            <td th:text="${n.messaggio}" th:id="'n-msg-' + ${n.id}"></td>
+            <td th:text="${n.prenotazioneId}" th:id="'n-prenotazione-' + ${n.id}"></td> 
+            <td th:text="${n.descrizione}" th:id="'n-msg-' + ${n.id}"></td> <td>
+            <td>
+                <form th:action="@{/notificatore/{id}(id=${n.id})}" method="post"
+                      th:onsubmit="'return confirm(\'Vuoi eliminare questa notifica?\');'">
+                    
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">
+                        Elimina
+                    </button>
+                </form>
+            </td>
         </tr>
 
     </tbody>
 
 </table>
-
+    <div style="margin-top: 20px;">
+        <a id="link-home" href="/">Torna alla Home</a>
+    </div>
 </main>
-
+<script>
+function personalizzaUrlDeleteAll(formElement) {
+    var idUtente = document.getElementById('input-utente-delete-id').value;
+    if(!idUtente) return false;
+    
+    if(confirm('Sei sicuro di voler cancellare TUTTE le notifiche dell\'utente ' + idUtente + '?')) {
+        // Cambia dinamicamente l'action inserendo l'ID digitato dall'utente
+        formElement.action = '/notificatore/utente/' + idUtente;
+        return true;
+    }
+    return false;
+}
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Prenotazioni</title>
 </head>
@@ -17,7 +17,7 @@
     <thead id="thead-prenotazioni">
         <tr>
             <th>ID</th>
-            <th>Utente</th>
+            <th>Id Utente</th>
             <th>Persone</th>
             <th>Data</th>
         </tr>
@@ -27,7 +27,7 @@
 
         <tr th:each="p : ${prenotazioni}" th:id="'prenotazione-' + ${p.id}">
             <td th:text="${p.id}" th:id="'p-id-' + ${p.id}"></td>
-            <td th:text="${p.clienteId}" th:id="'p-utente-' + ${p.id}"></td>
+            <td th:text="${p.utenteId}" th:id="'p-utente-' + ${p.id}"></td>
             <td th:text="${p.numeroPersone}" th:id="'p-persone-' + ${p.id}"></td>
             <td th:text="${p.dataOra}" th:id="'p-data-' + ${p.id}"></td>
             <td>
@@ -35,7 +35,6 @@
                       th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare la prenotazione ID ' + ${p.id} + '?\');'">
                     
                     <input type="hidden" name="_method" value="DELETE" />
-                    
                     <button type="submit" style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">
                         Elimina
                     </button>
@@ -46,7 +45,9 @@
     </tbody>
 
 </table>
-
+    <div style="margin-top: 20px;">
+        <a id="link-home" href="/">Torna alla Home</a>
+    </div>
 </main>
 
 </body>

@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Il mio Profilo</title>
+</head>
+<body id="body-profilo">
+
+<header id="header-profilo">
+    <h1 id="title-profilo">Il mio Profilo</h1>
+</header>
+
+<main id="main-profilo">
+
+    <div id="profilo-container" th:if="${utenteLoggato != null}">
+        <p id="profilo-id"><strong>ID Utente:</strong> <span th:text="${utenteLoggato.id}"></span></p>
+        <p id="profilo-nome"><strong>Nome:</strong> <span th:text="${utenteLoggato.nome}"></span></p>
+        <p id="profilo-cognome"><strong>Cognome:</strong> <span th:text="${utenteLoggato.cognome}"></span></p>
+        <p id="profilo-email"><strong>Email:</strong> <span th:text="${utenteLoggato.email}"></span></p>
+        <p id="profilo-ruolo"><strong>Ruolo:</strong> <span th:text="${utenteLoggato.ruolo}"></span></p>
+    </div>
+
+    <div id="profilo-not-found" th:if="${utenteLoggato == null}">
+        <p>Impossibile caricare i dati del profilo.</p>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a id="link-home" href="/">Torna alla Home</a>
+    </div>
+
+</main>
+
+</body>
+<html xmlns:th="http://www.thymeleaf.org"></html>

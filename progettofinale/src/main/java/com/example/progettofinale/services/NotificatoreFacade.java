@@ -43,4 +43,8 @@ public class NotificatoreFacade {
     public void cancellaNotificheUtente(int idUtente) {
         notificatore.cancellaNotifichePerUtente(idUtente);
     }
+    // Cancella notifiche per id
+    public void cancellaNotifica(int id) {
+        notificatore.cancellaNotifica(id);
+    }
 }

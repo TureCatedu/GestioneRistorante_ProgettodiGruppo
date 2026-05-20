@@ -2,6 +2,7 @@ package com.example.progettofinale.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,17 @@ public class NotificatoreController {
 
         return "notifiche";
     }
-
+    //cancella notifica per id
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    public String cancellaNotificaSingola(@PathVariable int id) {
+        
+        // Chiama il facade per rimuovere la notifica dal database
+        notificatoreFacade.cancellaNotifica(id);
+        
+        // Effettua un redirect per ricaricare la pagina delle notifiche aggiornata
+        return "redirect:/notificatore"; 
+    }
     // Ottieni notifiche per Prenotazione (Admin e Camerieri)
     @GetMapping("/prenotazione/{idPrenotazione}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
@@ -76,5 +87,15 @@ public class NotificatoreController {
         notificatoreFacade.cancellaNotificheUtente(idUtente);
 
         return "redirect:/notifiche";
+    }
+    //cancella notifiche per utente
+    @DeleteMapping("/utente/me")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    public String deleteNotifichePerUtente(Authentication authentication) {
+        String email = authentication.getName();
+        Utente utente = utenteRepo.findByEmail(email).orElse(null);
+        int idUtente = utente.getId();
+        notificatoreFacade.cancellaNotificheUtente(idUtente);
+        return "redirect:/notificatore/utente/me";
     }
 }
