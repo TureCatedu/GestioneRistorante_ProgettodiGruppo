@@ -37,6 +37,7 @@ class Notificatore implements Observer {
     public void update(Notifica notifica) {
         List<Utente> utenti = utenteRepo.findByRuolo(Ruolo.AMMINISTRATORE);
         utenti.addAll(utenteRepo.findByRuolo(Ruolo.CAMERIERE));
+        utenti.add(utenteRepo.findById(notifica.getPrenotazione().getCliente().getId()).orElse(null));
         Notifica notificaDb = new Notifica(notifica.getPrenotazione(), notifica.getDescrizione());
         
         for (Utente utente : utenti) {

@@ -1,6 +1,8 @@
 package com.example.progettofinale.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,7 +13,9 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "Notifiche")
 public class Notifica {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //foreign key
     @ManyToOne

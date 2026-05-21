@@ -5,6 +5,7 @@ import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
+import com.example.progettofinale.services.UtenteService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,11 +23,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/utenti")
 public class UtenteController {
     
-    private final UtenteRepo utenteRepo;
+    private final UtenteService utenteService;
     private final PasswordEncoder passwordEncoder;
 
-    public UtenteController(UtenteRepo utenteRepo, PasswordEncoder passwordEncoder) {
-        this.utenteRepo = utenteRepo;
+    public UtenteController(UtenteService utenteService, PasswordEncoder passwordEncoder) {
+        this.utenteService = utenteService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -35,7 +36,7 @@ public class UtenteController {
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String findById(@PathVariable Integer id, Model model) {
 
-        Utente utente = utenteRepo.findById(id).orElse(null);
+        LoginResponse utente = utenteService.findById(id);
 
         model.addAttribute("utente", utente);
 
@@ -47,7 +48,7 @@ public class UtenteController {
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public String findAll(Model model) {
 
-        List<Utente> utenti = utenteRepo.findAll();
+        List<LoginResponse> utenti = utenteService.findAll();
 
         model.addAttribute("utenti", utenti);
 
@@ -61,8 +62,8 @@ public class UtenteController {
                                      @RequestParam String nome,
                                      Model model) {
 
-        List<Utente> utenti =
-                utenteRepo.findByCognomeAndNomeIgnoreCase(cognome, nome);
+        List<LoginResponse> utenti =
+                utenteService.findByCognomeAndNomeIgnoreCase(cognome, nome);
 
         model.addAttribute("utenti", utenti);
 
@@ -75,7 +76,7 @@ public class UtenteController {
     public String findByRuolo(@RequestParam Ruolo ruolo,
                               Model model) {
 
-        List<Utente> utenti = utenteRepo.findByRuolo(ruolo);
+        List<LoginResponse> utenti = utenteService.findByRuolo(ruolo);
 
         model.addAttribute("utenti", utenti);
 
@@ -87,7 +88,7 @@ public class UtenteController {
     public String getMioProfilo(Authentication authentication,
                                 Model model) {
 
-        Utente utente = utenteRepo.findByEmail(authentication.getName()).orElse(null);
+        LoginResponse utente = utenteService.findByEmail(authentication.getName());
 
         model.addAttribute("utenteLoggato", utente);
 
@@ -111,8 +112,7 @@ public class UtenteController {
     public String login(@RequestBody LoginRequest request,
                         Model model) {
 
-        LoginResponse loginResponse = utenteRepo.findByEmail(request.email())
-                .filter(u -> passwordEncoder.matches(request.password(), u.getPassword())).map(u ->new LoginResponse(
+         LoginResponse loginResponse = utenteService.findByEmailComplete(request.email()).filter(u -> passwordEncoder.matches(request.password(), u.getPassword())).map(u ->new LoginResponse(
                     u.getId(),
                     u.getNome(),
                     u.getCognome(),
@@ -130,7 +130,7 @@ public class UtenteController {
     public String createUtente(Utente nuovoUtente) {
         String passwordCriptata = passwordEncoder.encode(nuovoUtente.getPassword());
         nuovoUtente.setPassword(passwordCriptata);
-        utenteRepo.save(nuovoUtente);
+        utenteService.save(nuovoUtente);
 
         return "redirect:/login";
     }
@@ -140,16 +140,15 @@ public class UtenteController {
     public String updateUtente(@PathVariable Integer id,
                                Utente utenteAggiornato) {
 
-        Utente utenteEsistente = utenteRepo.findById(id).orElse(null);
+        Utente utente = utenteService.findByIdComplete(id).orElse(null);
+        if (utente != null) {
+            utente.setNome(utenteAggiornato.getNome());
+            utente.setCognome(utenteAggiornato.getCognome());
+            utente.setEmail(utenteAggiornato.getEmail());
+            utente.setPassword(utenteAggiornato.getPassword());
+            utente.setRuolo(utenteAggiornato.getRuolo());
 
-        if (utenteEsistente != null) {
-            utenteEsistente.setNome(utenteAggiornato.getNome());
-            utenteEsistente.setCognome(utenteAggiornato.getCognome());
-            utenteEsistente.setEmail(utenteAggiornato.getEmail());
-            utenteEsistente.setPassword(utenteAggiornato.getPassword());
-            utenteEsistente.setRuolo(utenteAggiornato.getRuolo());
-
-            utenteRepo.save(utenteEsistente);
+            utenteService.save(utente);
         }
 
         return "redirect:/utenti";
@@ -160,7 +159,7 @@ public class UtenteController {
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public String deleteUtente(@PathVariable Integer id) {
 
-        utenteRepo.deleteById(id);
+        utenteService.deleteById(id);
 
         return "redirect:/utenti";
     }
