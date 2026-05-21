@@ -249,9 +249,10 @@ Il progetto implementa una gestione globale degli errori tramite `@ControllerAdv
 - **AccessDeniedException** (403) → Accesso negato per permessi insufficienti
 - **PrenotazioneNonTrovataException** (404) → Prenotazione non trovata
 - **UtenteNonTrovatoException** (404) → Utente non trovato
+- **NotificaNonTrovataException** (404) → Notifica non trovata
 - **Exception** (500) → Errore generico
 
-Tutte le risposte di errore seguono il formato `ErrorResponse` con timestamp e messaggio descrittivo.
+Tutte le risposte di errore aprono la pagina di errore con timestamp e messaggio descrittivo.
 
 ---
 
