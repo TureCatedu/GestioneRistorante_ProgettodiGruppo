@@ -4,28 +4,29 @@
     <title>Prenotazione</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body id="body-prenotazione">
-
 <header id="header-prenotazione">
-    <h1 id="title-prenotazione">Dettaglio Prenotazione</h1>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <div class="container header-content">
+        <h1 id="title-prenotazione">Dettaglio Prenotazione</h1>
+        <a href="/prenotazioni" style="color: white; text-decoration: none;">Torna alla Lista</a>
+    </div>
 </header>
+<main id="main-prenotazione" class="container mt-2" style="max-width: 600px;">
+    
+    <div class="card detail-list" id="prenotazione-container" th:if="${prenotazione != null}">
+        <p id="prenotazione-id"><strong>ID Prenotazione:</strong> <span th:text="${prenotazione.id}"></span></p>
+        <p id="prenotazione-utente"><strong>ID Utente:</strong> <span th:text="${prenotazione.utenteId}"></span></p> 
+        <p id="prenotazione-persone"><strong>Numero Persone:</strong> <span th:text="${prenotazione.numeroPersone}"></span></p>
+        <p id="prenotazione-data"><strong>Data e Ora:</strong> <span th:text="${prenotazione.dataOra}"></span></p>
+    </div>
 
-<main id="main-prenotazione">
+    <div class="card alert-danger text-center" id="prenotazione-not-found" th:if="${prenotazione == null}">
+        Prenotazione non trovata
+    </div>
 
-<div id="prenotazione-container" th:if="${prenotazione != null}">
-    <p id="prenotazione-id"><strong>ID Prenotazione:</strong> <span th:text="${prenotazione.id}"></span></p>
-    <p id="prenotazione-utente"><strong>ID Utente:</strong> <span th:text="${prenotazione.utenteId}"></span></p> 
-    <p id="prenotazione-persone"><strong>Numero Persone:</strong> <span th:text="${prenotazione.numeroPersone}"></span></p>
-    <p id="prenotazione-data"><strong>Data e Ora:</strong> <span th:text="${prenotazione.dataOra}"></span></p>
-</div>
-
-<div id="prenotazione-not-found" th:if="${prenotazione == null}">
-    Prenotazione non trovata
-</div>
-
+    <div class="text-center mt-2">
+        <a href="/" class="btn btn-secondary" style="width: auto;">Torna alla Home</a>
+    </div>
 </main>
-
 </body>
 </html>

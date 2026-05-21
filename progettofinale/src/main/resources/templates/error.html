@@ -4,22 +4,17 @@
     <title>Error</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body id="body-error">
-
 <header id="header-error">
-    <h1 id="title-error">Errore</h1>
+    <div class="container header-content">
+        <h1 id="title-error">Errore di Sistema</h1>
+    </div>
 </header>
-
-<main id="main-error">
-
-<p id="error-message" th:text="${error}">
-    Errore generico
-</p>
-
-<a id="link-home" href="/">Torna alla home</a>
-
+<main id="main-error" class="container text-center mt-2" style="max-width: 600px;">
+    <div class="card alert-danger">
+        <p id="error-message" th:text="${error}" style="margin: 0; font-size: 1.1rem;">Errore generico</p>
+    </div>
+    <a id="link-home" href="/" class="btn btn-secondary" style="width: auto;">Torna alla home</a>
 </main>
-
 </body>
 </html>

@@ -8,6 +8,7 @@
 <header>
     <div class="container header-content">
         <h1>Gestione Prenotazioni</h1>
+        <!-- @{/} - Link alla home page -->
         <a href="/" class="btn btn-secondary" style="color: white; border-color: white;">Torna alla Home</a>
     </div>
 </header>
@@ -19,21 +20,35 @@
         
         <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
             
+            <!-- 
+              th:action="@{/prenotazioni/cerca}"
+              Quando il form viene inviato, va a GET /prenotazioni/cerca
+              Tutta la logica di ricerca è gestita dal controller PrenotazioneController
+            -->
             <form th:action="@{/prenotazioni/cerca}" method="get" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')" style="flex: 1; min-width: 300px; display: flex; gap: 10px; align-items: flex-end;">
+                <!-- 
+                  sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')"
+                  Questo form è visibile SOLO agli amministratori e camerieri
+                  I clienti non vedono nemmeno il form HTML
+                -->
                 <div style="flex: 1;">
                     <label style="font-size: 0.9rem;">Nome</label>
+                    <!-- name="nome" - Questo parametro viene inviato al controller via query string -->
                     <input type="text" name="nome" placeholder="Es. Mario" required>
                 </div>
                 <div style="flex: 1;">
                     <label style="font-size: 0.9rem;">Cognome</label>
+                    <!-- name="cognome" - Parametro query string: ?nome=Mario&cognome=Rossi -->
                     <input type="text" name="cognome" placeholder="Es. Rossi" required>
                 </div>
                 <button type="submit" class="btn" style="width: auto; padding: 12px 15px;">Cerca</button>
             </form>
 
+            <!-- Form diverso per cercare per data -->
             <form th:action="@{/prenotazioni/cerca-data}" method="get" style="flex: 1; min-width: 250px; display: flex; gap: 10px; align-items: flex-end;">
                 <div style="flex: 1;">
                     <label style="font-size: 0.9rem;">Filtra per Data</label>
+                    <!-- name="data" - Verrà inviato come parametro della query string -->
                     <input type="date" name="data" required>
                 </div>
                 <button type="submit" class="btn" style="width: auto; padding: 12px 15px;">Filtra</button>
@@ -42,7 +57,9 @@
         </div>
         
         <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <!-- Link normali senza parametri -->
             <a href="/prenotazioni" class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.9rem;">Mostra Tutte</a>
+            <!-- Questo link è visibile solo per staff (non clienti) -->
             <a href="/prenotazioni/oggi" class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.9rem;" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')">Prenotazioni di Oggi</a>
         </div>
     </div>
@@ -59,14 +76,44 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- 
+                  th:each="p : ${prenotazioni}"
+                  CICLO: Per ogni elemento nella lista "prenotazioni" (che viene dal controller),
+                  crea una riga di tabella e chiama l'elemento attuale "p" (variabile locale)
+                  
+                  ${prenotazioni} viene passato dal controller:
+                  model.addAttribute("prenotazioni", listaPrenotazioni);
+                  
+                  Esempio: se ci sono 3 prenotazioni, questa riga <tr> viene ripetuta 3 volte
+                -->
                 <tr th:each="p : ${prenotazioni}">
+                    <!-- ${p.id} - Inserisce il valore dell'id della prenotazione corrente -->
                     <td th:text="${p.id}"></td>
+                    <!-- ${p.utenteId} - Inserisce l'id dell'utente -->
                     <td th:text="${p.utenteId}"></td>
+                    <!-- ${p.numeroPersone} - Numero di persone della prenotazione -->
                     <td th:text="${p.numeroPersone}"></td>
+                    <!-- 
+                      #temporals.format(p.dataOra, 'dd/MM/yyyy HH:mm')
+                      Utility di Thymeleaf per formattare date
+                      Prende la data in formato database e la mostra come: 21/05/2026 14:30
+                      #temporals.* sono funzioni utility di Thymeleaf per gestire date/ore
+                    -->
                     <td th:text="${#temporals.format(p.dataOra, 'dd/MM/yyyy HH:mm')}"></td>
                     <td>
+                        <!-- 
+                          th:action="@{/prenotazioni/{id}(id=${p.id})}"
+                          Crea un URL dinamico usando il valore di p.id
+                          Se p.id = 5, il risultato è: /prenotazioni/5
+                          Il (id=${p.id}) significa: passa il parametro id con valore p.id
+                        -->
                         <form th:action="@{/prenotazioni/{id}(id=${p.id})}" method="post" 
                               th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare questa prenotazione?\');'">
+                            <!-- 
+                              name="_method" value="DELETE"
+                              Spring usa questo trucco per simulare DELETE su form HTML (che supporta solo POST/GET)
+                              Il controller riceve il DELETE grazie a spring.mvc.hiddenmethod.filter.enabled=true
+                            -->
                             <input type="hidden" name="_method" value="DELETE" />
                             <button class="btn btn-danger" type="submit">Elimina</button>
                         </form>

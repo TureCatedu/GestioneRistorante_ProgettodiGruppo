@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!-- Questo file è il form per creare una nuova prenotazione -->
 <head>
     <title>Nuova Prenotazione</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -10,16 +11,42 @@
 </header>
 <main class="container" style="max-width: 600px; margin-top: 30px;">
     <div class="card">
+        <!-- 
+          th:action="@{/prenotazioni}" method="post"
+          Questo form invia i dati a POST /prenotazioni
+          Il controller PrenotazioneController riceve il POST e crea una nuova Prenotazione
+        -->
         <form th:action="@{/prenotazioni}" method="post">
+            <!-- 
+              name="utenteId" - Nome del parametro da inviare al controller
+              th:value="${utenteLoggatoId}" 
+              Inserisce l'ID dell'utente attualmente loggato
+              
+              Questo valore viene passato dal controller ViewController.java:
+              model.addAttribute("utenteLoggatoId", utenteLoggato.getId());
+              
+              Quindi l'utente non può modificarlo nel form
+            -->
             <input type="hidden" name="utenteId" th:value="${utenteLoggatoId}" required>
             
             <div class="form-group">
                 <label>Numero Persone</label>
+                <!-- 
+                  type="number" - Campo numerico con spinner up/down
+                  name="numeroPersone" - Parametro POST
+                  min="1" - Non puoi inserire meno di 1 persona
+                  required - Campo obbligatorio
+                -->
                 <input type="number" name="numeroPersone" placeholder="Es. 4" min="1" required>
             </div>
             
             <div class="form-group">
                 <label>Data e Ora</label>
+                <!-- 
+                  type="datetime-local" - Permette di selezionare data E ora
+                  Formato HTML standard: YYYY-MM-DDTHH:mm
+                  Nel backend viene convertito a LocalDateTime dalla validazione @Future
+                -->
                 <input type="datetime-local" name="dataOra" required>
             </div>
             
