@@ -106,6 +106,8 @@ public class UtenteController {
         return "redirect:/login"; 
     }
     /* 
+    Login Deprecato, ci pensa security config
+    
     // POST: Login 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request,
