@@ -145,7 +145,6 @@ public class UtenteController {
             utente.setNome(utenteAggiornato.getNome());
             utente.setCognome(utenteAggiornato.getCognome());
             utente.setEmail(utenteAggiornato.getEmail());
-            utente.setPassword(utenteAggiornato.getPassword());
             utente.setRuolo(utenteAggiornato.getRuolo());
 
             utenteService.save(utente);
