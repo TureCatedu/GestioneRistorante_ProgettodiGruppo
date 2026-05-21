@@ -19,7 +19,10 @@ public class Notifica {
     private Integer id;
     //foreign key
     @ManyToOne
-    @JoinColumn(name = "prenotazione_id")
+    @JoinColumn(
+        name = "prenotazione_id",
+        referencedColumnName = "id_prenotazione"
+    )
     private Prenotazione prenotazione;
     @ManyToOne
     @JoinColumn(name = "utente_id", nullable = false)

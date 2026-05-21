@@ -8,6 +8,8 @@ import com.example.progettofinale.models.Notifica;
 import com.example.progettofinale.models.NotificaRequest;
 import com.example.progettofinale.models.NotificaResponse;
 
+import jakarta.transaction.Transactional;
+
 @Component
 public class NotificatoreFacade {
 
@@ -40,6 +42,8 @@ public class NotificatoreFacade {
     }
 
     // Cancella notifiche di un utente
+
+    @Transactional
     public void cancellaNotificheUtente(int idUtente) {
         notificatore.cancellaNotifichePerUtente(idUtente);
     }
