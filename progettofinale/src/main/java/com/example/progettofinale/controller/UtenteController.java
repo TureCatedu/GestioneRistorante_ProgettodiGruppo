@@ -93,7 +93,8 @@ public class UtenteController {
 
         return "profilo";
     }
-
+    /* 
+     Lougout Deprecato, ci pensa security config
     // GET: Effettua il logout dell'utente corrente
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -105,7 +106,8 @@ public class UtenteController {
 
         // Dopo il logout, reindirizziamo l'utente alla pagina di login (o alla home)
         return "redirect:/login"; 
-    }
+    }*/
+   
     /* 
     Login Deprecato, ci pensa security config
     

@@ -41,14 +41,14 @@ public class ViewController {
     @GetMapping("/prenotazioni/nuova")
     public String nuovaPrenotazione(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (userDetails != null) {
-        // Recuperiamo l'utente intero dal database usando l'email dell'utente loggato
-        Utente utenteLoggato = utenteRepo.findByEmail(userDetails.getUsername()).orElse(null);
-        
-        if (utenteLoggato != null) {
-            // Passiamo l'id dell'utente alla pagina HTML tramite il Model
-            model.addAttribute("utenteLoggatoId", utenteLoggato.getId());
+            // Recuperiamo l'utente intero dal database usando l'email dell'utente loggato
+            Utente utenteLoggato = utenteRepo.findByEmail(userDetails.getUsername()).orElse(null);
+            
+            if (utenteLoggato != null) {
+                // Passiamo l'id dell'utente alla pagina HTML tramite il Model
+                model.addAttribute("utenteLoggatoId", utenteLoggato.getId());
+            }
         }
-    }
         return "nuova_prenotazione";
     }
 }
