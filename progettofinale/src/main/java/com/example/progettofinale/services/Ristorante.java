@@ -24,15 +24,13 @@ class Ristorante implements Subject {
     //attributi per injection
     private final PrenotazioneRepo prenotazioneRepo;
     private final UtenteRepo utenteRepo;
-    // Notificatore
-    Notificatore notificatore;
     //observers
     List<Observer> observers = new ArrayList<>();
     
     // costruttore con parametri per l'injection
     public Ristorante(PrenotazioneRepo prenotazioneRepo, Notificatore notificatore, UtenteRepo utenteRepo) {
         this.prenotazioneRepo = prenotazioneRepo;
-        this.notificatore = notificatore;
+        registerObserver(notificatore);
         this.utenteRepo = utenteRepo;
     }
 
