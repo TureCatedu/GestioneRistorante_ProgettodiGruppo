@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- 
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  Namespace aggiuntivo che abilita gli attributi sec:* per controllare cosa visualizzare in base ai ruoli
+  Permette di filtrare contenuti per utenti autenticati e ruoli specifici
+-->
 <head>
     <title>Home - Gestione Ristorante</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -9,19 +14,41 @@
 <header id="header-index">
     <div class="container header-content">
         <h1 id="title-index">Gestione Ristorante</h1>
+        <!-- 
+          sec:authorize="isAuthenticated()"
+          Mostra questo div SOLO se l'utente è autenticato (loggato)
+          Se non loggato, questo elemento viene rimosso dalla pagina HTML
+        -->
         <div sec:authorize="isAuthenticated()" style="font-size: 0.9rem;">
             Benvenuto, <strong><span sec:authentication="name">Utente</span></strong> | 
+            <!-- 
+              sec:authentication="name"
+              Inserisce il nome dell'utente autenticato (email nel nostro caso)
+            -->
             <a href="/logout" style="color: #e74c3c; text-decoration: none; margin-left: 10px;">Esci</a>
         </div>
     </div>
 </header>
 
 <nav id="nav-index">
+    <!-- 
+      sec:authorize="hasAuthority('AMMINISTRATORE')"
+      Mostra il link SOLO agli utenti con ruolo AMMINISTRATORE
+    -->
     <a href="/utenti" sec:authorize="hasAuthority('AMMINISTRATORE')">Gestione Utenti</a>
+    
+    <!-- 
+      sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')"
+      Usa hasAnyAuthority() per più ruoli, hasAuthority() per un singolo ruolo
+    -->
     <a href="/prenotazioni" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Visualizza Prenotazioni</a>
     <a href="/prenotazioni/nuova" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Nuova Prenotazione</a>
+    
+    <!-- sec:authorize="isAuthenticated()" - Mostra solo se loggato -->
     <a href="/notificatore/utente/me" sec:authorize="isAuthenticated()">Notifiche</a>
     <a href="/utenti/me" sec:authorize="isAuthenticated()">Il mio Profilo</a>
+    
+    <!-- sec:authorize="isAnonymous()" - Mostra solo se NON loggato (utente anonimo) -->
     <a href="/login" sec:authorize="isAnonymous()">Accedi</a>
 </nav>
 
