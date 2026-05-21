@@ -1,6 +1,7 @@
 package com.example.progettofinale.controller;
 
 import com.example.progettofinale.repository.UtenteRepo;
+import com.example.progettofinale.services.UtenteService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,8 +45,8 @@ public class SecurityConfig {
 
     // Insegna a Spring Security come trovare i tuoi utenti
     @Bean
-    public UserDetailsService userDetailsService(UtenteRepo utenteRepo) {
-        return email -> utenteRepo.findByEmail(email)
+    public UserDetailsService userDetailsService(UtenteService utenteService) {
+        return email -> utenteService.findByEmailComplete(email)
                 .map(utente -> User.withUsername(utente.getEmail())
                         .password(utente.getPassword())
                         .authorities(utente.getRuolo().name()) // Assegna il ruolo come autorità

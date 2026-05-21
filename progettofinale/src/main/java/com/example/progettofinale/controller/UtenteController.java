@@ -106,6 +106,7 @@ public class UtenteController {
         // Dopo il logout, reindirizziamo l'utente alla pagina di login (o alla home)
         return "redirect:/login"; 
     }
+    /* 
     // POST: Login 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request,
@@ -123,6 +124,7 @@ public class UtenteController {
 
         return "redirect:/";
     }
+    */
 
     // POST: Crea un nuovo utente
     @PostMapping
