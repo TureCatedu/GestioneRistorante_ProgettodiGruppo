@@ -5,9 +5,6 @@ import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.services.UtenteService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -94,7 +90,8 @@ public class UtenteController {
 
         return "profilo";
     }
-
+    /* 
+     Lougout Deprecato, ci pensa security config
     // GET: Effettua il logout dell'utente corrente
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

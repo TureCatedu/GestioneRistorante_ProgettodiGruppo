@@ -108,9 +108,9 @@ progettofinale/
 
 | Nome | Ruolo | Responsabilità |
 |------|-------|-----------------|
-| **Mauro Bilardo** | Backend Lead | Modelli (Entity/DTO), Risoluzione errori, Repository e Data Access |
-| **Tommaso Ciccotti** | Frontend & Service | Frontend (Template/CSS), Services, Pattern Observer, DTO Management |
-| **Andrea Catudella** | Error Handling & Design | Gestione Errori Globali, Controller API, Styling CSS |
+| **Mauro Bilardo** | Backend Lead | Modelli (Entity/DTO), Risoluzione errori, Repository e Data Access, Facade |
+| **Tommaso Ciccotti** | Frontend & Service | Frontend (Template/CSS/Thymeleaf), Services, Pattern Observer, DTO Management, Eccezioni  custom, Facade |
+| **Andrea Catudella** | Error Handling & Design | Gestione Errori Globali, Controller API, Styling CSS, Gestione Autenticazione e Permessi |
 
 ---
 
