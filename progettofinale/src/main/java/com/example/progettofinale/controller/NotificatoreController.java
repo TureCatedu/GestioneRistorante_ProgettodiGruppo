@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.NotificaResponse;
-import com.example.progettofinale.models.Utente;
-import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.NotificatoreFacade;
 import com.example.progettofinale.services.UtenteService;
 

@@ -4,7 +4,6 @@ import com.example.progettofinale.models.LoginRequest;
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
-import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.UtenteService;
 
 import jakarta.servlet.http.HttpServletRequest;
