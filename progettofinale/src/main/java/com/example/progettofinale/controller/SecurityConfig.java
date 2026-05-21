@@ -1,6 +1,5 @@
 package com.example.progettofinale.controller;
 
-import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.UtenteService;
 
 import org.springframework.context.annotation.Bean;
