@@ -5,10 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.NotificaResponse;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.NotificatoreFacade;
+import com.example.progettofinale.services.UtenteService;
 
 import java.util.List;
 
@@ -17,11 +20,11 @@ import java.util.List;
 public class NotificatoreController {
     
     private final NotificatoreFacade notificatoreFacade;
-    private final UtenteRepo utenteRepo;
+    private final UtenteService utenteService;
 
-    public NotificatoreController(NotificatoreFacade notificatoreFacade, UtenteRepo utenteRepo) {
+    public NotificatoreController(NotificatoreFacade notificatoreFacade, UtenteService utenteService) {
         this.notificatoreFacade = notificatoreFacade;
-        this.utenteRepo = utenteRepo;
+        this.utenteService = utenteService;
     }
 
     // Ottieni tutte le notifiche (Solo Admin)
@@ -43,8 +46,8 @@ public class NotificatoreController {
     public String getNotifichePerUtente(
         Authentication authentication,
         Model model) {
-        Utente utente = utenteRepo.findByEmail(authentication.getName()).orElse(null);
-        Integer idUtente = utente.getId();
+        LoginResponse utente = utenteService.findByEmail(authentication.getName());
+        Integer idUtente = utente.id();
         List<NotificaResponse> notifiche =
                 notificatoreFacade.getNotifichePerUtente(idUtente);
 
@@ -92,8 +95,8 @@ public class NotificatoreController {
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String deleteNotifichePerUtente(Authentication authentication) {
         String email = authentication.getName();
-        Utente utente = utenteRepo.findByEmail(email).orElse(null);
-        int idUtente = utente.getId();
+        LoginResponse utente = utenteService.findByEmail(email);
+        int idUtente = utente.id();
         notificatoreFacade.cancellaNotificheUtente(idUtente);
         return "redirect:/notificatore/utente/me";
     }
