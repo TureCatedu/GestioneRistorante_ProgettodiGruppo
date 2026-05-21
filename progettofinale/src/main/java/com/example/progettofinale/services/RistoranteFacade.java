@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.example.progettofinale.models.Prenotazione;
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
 

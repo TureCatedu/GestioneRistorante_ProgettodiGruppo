@@ -41,10 +41,10 @@ public class PrenotazioneController {
         return "prenotazione";
     }
 
-    // Ottieni tutte le prenotazioni (Solo staff)
+    // Ottieni tutte le prenotazioni 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')") // Aggiunto CLIENTE
-    public String listaPrenotazioni(Model model, Authentication authentication) { // Aggiunto Authentication
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    public String listaPrenotazioni(Model model, Authentication authentication) {
         
         List<PrenotazioneResponse> listaDaMostrare;
 
@@ -83,9 +83,20 @@ public class PrenotazioneController {
 
     // Cerca per data (Solo staff)
     @GetMapping("/cerca-data")
-    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
-    public String findByData(@RequestParam String data, Model model) {
-        List<PrenotazioneResponse> list = ristorante.cercaPrenotazionePerData(data);
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    public String findByData(@RequestParam String data, Model model, Authentication authentication) {
+        List<PrenotazioneResponse> list;
+
+        if (ristorante.isCliente(authentication)) {
+            // Se è cliente, prende le sue e le filtra
+            list = ristorante.getPrenotazioniPersonali(authentication.getName()).stream()
+                    .filter(p -> p.dataOra().toString().startsWith(data))
+                    .toList();
+        } else {
+            // Se è staff, cerca in tutto il DB
+            list = ristorante.cercaPrenotazionePerData(data);
+        }
+
         model.addAttribute("prenotazioni", list);
         return "prenotazioni";
     }

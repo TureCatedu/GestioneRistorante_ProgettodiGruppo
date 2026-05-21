@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Prenotazioni</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -13,12 +13,46 @@
 </header>
 
 <main class="container mt-2">
+    
+    <div class="card" style="margin-bottom: 20px;">
+        <h3 style="margin-top: 0;">Cerca Prenotazioni</h3>
+        
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+            
+            <form th:action="@{/prenotazioni/cerca}" method="get" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')" style="flex: 1; min-width: 300px; display: flex; gap: 10px; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label style="font-size: 0.9rem;">Nome</label>
+                    <input type="text" name="nome" placeholder="Es. Mario" required>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 0.9rem;">Cognome</label>
+                    <input type="text" name="cognome" placeholder="Es. Rossi" required>
+                </div>
+                <button type="submit" class="btn" style="width: auto; padding: 12px 15px;">Cerca</button>
+            </form>
+
+            <form th:action="@{/prenotazioni/cerca-data}" method="get" style="flex: 1; min-width: 250px; display: flex; gap: 10px; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label style="font-size: 0.9rem;">Filtra per Data</label>
+                    <input type="date" name="data" required>
+                </div>
+                <button type="submit" class="btn" style="width: auto; padding: 12px 15px;">Filtra</button>
+            </form>
+
+        </div>
+        
+        <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <a href="/prenotazioni" class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.9rem;">Mostra Tutte</a>
+            <a href="/prenotazioni/oggi" class="btn btn-secondary" style="width: auto; padding: 8px 12px; font-size: 0.9rem;" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')">Prenotazioni di Oggi</a>
+        </div>
+    </div>
+
     <div class="card table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>ID Utente</th>
+                    <th>Id</th>
+                    <th>UtenteID</th>
                     <th>Persone</th>
                     <th>Data e Ora</th>
                     <th>Azioni</th>
@@ -29,7 +63,7 @@
                     <td th:text="${p.id}"></td>
                     <td th:text="${p.utenteId}"></td>
                     <td th:text="${p.numeroPersone}"></td>
-                    <td th:text="${p.dataOra}"></td>
+                    <td th:text="${#temporals.format(p.dataOra, 'dd/MM/yyyy HH:mm')}"></td>
                     <td>
                         <form th:action="@{/prenotazioni/{id}(id=${p.id})}" method="post" 
                               th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare questa prenotazione?\');'">
