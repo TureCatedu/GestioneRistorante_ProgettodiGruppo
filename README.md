@@ -225,6 +225,10 @@ Il sistema implementa tre ruoli principali:
     <groupId>com.h2database</groupId>
     <artifactId>h2</artifactId>
 </dependency>
+<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+</dependency>
 ```
 
 ---
