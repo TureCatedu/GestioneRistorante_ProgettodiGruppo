@@ -1,6 +1,7 @@
 package com.example.progettofinale.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
@@ -21,6 +22,14 @@ public class UtenteService {
     public LoginResponse findById(Integer id) {
         return toLoginResponse(utenteRepo.findById(id).orElse(null));
     }
+    //trova utente per id completo
+    public Optional<Utente> findByIdComplete(Integer id) {
+        return utenteRepo.findById(id);
+    }
+    //trova utente per email con anche password
+    public Optional<Utente> findByEmailComplete(String email) {
+        return utenteRepo.findByEmail(email);
+    }
     //find by email
     public LoginResponse findByEmail(String email) {
         return toLoginResponse(utenteRepo.findByEmail(email).orElse(null));
@@ -36,5 +45,13 @@ public class UtenteService {
     // trova utenti per ruolo
     public List<LoginResponse> findByRuolo(Ruolo ruolo) {
         return utenteRepo.findByRuolo(ruolo).stream().map(this::toLoginResponse).toList();
+    }
+    // salva utente
+    public LoginResponse save(Utente utente) {
+        return toLoginResponse(utenteRepo.save(utente));
+    }
+
+    public void deleteById(Integer id) {
+        utenteRepo.deleteById(id);
     }
 }
