@@ -121,7 +121,6 @@ class Ristorante implements Subject {
     public void eliminaPrenotazione(Integer id) {
         Prenotazione prenotazione = prenotazioneRepo.findById(id).orElseThrow(() -> new PrenotazioneNonTrovataException(id));
         prenotazioneRepo.delete(prenotazione);
-        notifyObservers(new Notifica(prenotazione, "Prenotazione eliminata"));
     }
 
     // modifica prenotazione per id

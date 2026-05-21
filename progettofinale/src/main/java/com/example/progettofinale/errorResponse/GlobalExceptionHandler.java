@@ -2,8 +2,8 @@ package com.example.progettofinale.errorResponse;
 
 import java.time.LocalDateTime;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -13,27 +13,51 @@ public class GlobalExceptionHandler {
 
     // GESTIONE ERRORE ACCESSO NEGATO
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
-        ErrorResponse errorResponse = new ErrorResponse(403, "Accesso negato: " + e.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(403).body(errorResponse);
+    public String handleAccessDeniedException(AccessDeniedException e, Model model) {
+        model.addAttribute("status", 403);
+        model.addAttribute("error", "Accesso Negato");
+        model.addAttribute("message", "Non sei autorizzato a compiere questa azione: " + e.getMessage());
+        model.addAttribute("timestamp", LocalDateTime.now());
+        return "error";
     }
-    //gestione errori generici
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        ErrorResponse errorResponse = new ErrorResponse(500, "Internal Server Error: " + e.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(errorResponse.status()).body(errorResponse);
-    }
-    //gestione errore prenotazione non trovata
+
+    // gestione errore prenotazione non trovata
     @ExceptionHandler(value = PrenotazioneNonTrovataException.class)
-    public ResponseEntity<ErrorResponse> handlePrenotazioneNonTrovataException(PrenotazioneNonTrovataException e) {
-        ErrorResponse errorResponse = new ErrorResponse(404, "Prenotazione non trovata: " + e.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(errorResponse.status()).body(errorResponse);
+    public String handlePrenotazioneNonTrovataException(PrenotazioneNonTrovataException e, Model model) {
+        model.addAttribute("status", 404);
+        model.addAttribute("error", "Risorsa Non Trovata");
+        model.addAttribute("message", e.getMessage());
+        model.addAttribute("timestamp", LocalDateTime.now());
+        return "error";
     }
-    //gestione errore utente non trovato
+
+    // Gestione errore notifica non trovata
+    @ExceptionHandler(value = NotificaNonTrovataException.class)
+    public String handleNotificaNonTrovataException(NotificaNonTrovataException e, Model model) {
+        model.addAttribute("status", 404);
+        model.addAttribute("error", e.getMessage()); // Mappa il messaggio su th:text="${error}" di error.html
+        model.addAttribute("timestamp", LocalDateTime.now());
+        return "error"; 
+    }
+    
+    // gestione errore utente non trovato
     @ExceptionHandler(value = UtenteNonTrovatoException.class)
-    public ResponseEntity<ErrorResponse> handleUtenteNonTrovatoException(UtenteNonTrovatoException e) {
-        ErrorResponse errorResponse = new ErrorResponse(404, "Utente non trovato: " + e.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(errorResponse.status()).body(errorResponse);
+    public String handleUtenteNonTrovatoException(UtenteNonTrovatoException e, Model model) {
+        model.addAttribute("status", 404);
+        model.addAttribute("error", "Utente Non Trovato");
+        model.addAttribute("message", e.getMessage());
+        model.addAttribute("timestamp", LocalDateTime.now());
+        return "error";
+    }
+
+    // gestione errori generici
+    @ExceptionHandler(value = Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("status", 500);
+        model.addAttribute("error", "Internal Server Error");
+        model.addAttribute("message", "Si è verificato un errore imprevisto: " + e.getMessage());
+        model.addAttribute("timestamp", LocalDateTime.now());
+        return "error";
     }
     
 }

@@ -1,5 +1,6 @@
 package com.example.progettofinale.controller;
 
+import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
@@ -144,7 +145,7 @@ public class UtenteController {
     public String updateUtente(@PathVariable Integer id,
                                Utente utenteAggiornato) {
 
-        Utente utente = utenteService.findByIdComplete(id).orElse(null);
+        Utente utente = utenteService.findByIdComplete(id).orElseThrow(() -> new UtenteNonTrovatoException(id));
         if (utente != null) {
             utente.setNome(utenteAggiornato.getNome());
             utente.setCognome(utenteAggiornato.getCognome());

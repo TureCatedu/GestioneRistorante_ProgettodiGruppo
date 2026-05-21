@@ -5,5 +5,8 @@ public class UtenteNonTrovatoException extends RuntimeException {
     public UtenteNonTrovatoException(int id) {
         super("Utente con id " + id + " non trovato");
     }
+    public UtenteNonTrovatoException(String email) {
+        super("Utente con email " + email + " non trovato");
+    }
     
 }

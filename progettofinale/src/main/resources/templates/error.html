@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Error</title>
+    <meta charset="UTF-8">
+    <title>Errore dell'Applicazione</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body id="body-error">
-<header id="header-error">
-    <div class="container header-content">
-        <h1 id="title-error">Errore di Sistema</h1>
+<body>
+    <div style="margin: 50px; padding: 20px; border: 1px solid red; background-color: #fdd;">
+        <h1>Si è verificato un errore!</h1>
+        
+        <p><strong>Codice di Stato:</strong> <span th:text="${status}">500</span></p>
+        <p><strong>Errore:</strong> <span th:text="${error}">Internal Server Error</span></p>
+        <p><strong>Dettaglio:</strong> <span th:text="${message}">Messaggio di errore</span></p>
+        <p><strong>Data/Ora:</strong> <span th:text="${timestamp}">Oggi</span></p>
+        
+        <hr>
+        <a th:href="@{/}">Torna alla Home</a>
     </div>
-</header>
-<main id="main-error" class="container text-center mt-2" style="max-width: 600px;">
-    <div class="card alert-danger">
-        <p id="error-message" th:text="${error}" style="margin: 0; font-size: 1.1rem;">Errore generico</p>
-    </div>
-    <a id="link-home" href="/" class="btn btn-secondary" style="width: auto;">Torna alla home</a>
-</main>
 </body>
 </html>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.progettofinale.errorResponse.NotificaNonTrovataException;
 import com.example.progettofinale.errorResponse.PrenotazioneNonTrovataException;
 import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.Notifica;
@@ -103,6 +104,7 @@ class Notificatore implements Observer {
     }
     //cancella notifiche per id
     void cancellaNotifica(int id) {
+        notificatoreRepo.findById(id).orElseThrow(() -> new NotificaNonTrovataException(id));
         notificatoreRepo.deleteById(id);
     }
 }

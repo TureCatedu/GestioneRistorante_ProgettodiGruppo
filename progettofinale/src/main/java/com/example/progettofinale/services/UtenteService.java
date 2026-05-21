@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.progettofinale.errorResponse.UtenteNonTrovatoException;
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
@@ -23,7 +24,7 @@ public class UtenteService {
     }
     // trova utente per ID
     public LoginResponse findById(Integer id) {
-        return toLoginResponse(utenteRepo.findById(id).orElse(null));
+        return toLoginResponse(utenteRepo.findById(id).orElseThrow(() -> new UtenteNonTrovatoException(id)));
     }
     //trova utente per id completo
     public Optional<Utente> findByIdComplete(Integer id) {
@@ -35,7 +36,7 @@ public class UtenteService {
     }
     //find by email
     public LoginResponse findByEmail(String email) {
-        return toLoginResponse(utenteRepo.findByEmail(email).orElse(null));
+        return toLoginResponse(utenteRepo.findByEmail(email).orElseThrow(() -> new UtenteNonTrovatoException(email)));
     }
     //trova tutti gli utenti
     public List<LoginResponse> findAll() {
@@ -55,6 +56,9 @@ public class UtenteService {
     }
     // elimina utente
     public void deleteById(Integer id) {
+        if (!utenteRepo.existsById(id)) {
+            throw new UtenteNonTrovatoException(id);
+        }
         utenteRepo.deleteById(id);
     }
 }
