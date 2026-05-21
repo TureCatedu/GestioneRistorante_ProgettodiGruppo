@@ -76,6 +76,7 @@ progettofinale/
 │   │   │   │   └── Observer.java
 │   │   │   └── errorResponse/           # Gestione errori globali
 │   │   │       ├── GlobalExceptionHandler.java
+│   │   │       ├── NotificaNonTrovataException.java
 │   │   │       ├── ErrorResponse.java
 │   │   │       ├── PrenotazioneNonTrovataException.java
 │   │   │       └── UtenteNonTrovatoException.java
