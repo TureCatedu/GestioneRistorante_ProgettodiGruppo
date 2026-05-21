@@ -2,53 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Prenotazioni</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
-<body id="body-prenotazioni">
-
-<header id="header-prenotazioni">
-    <h1 id="title-prenotazioni">Prenotazioni</h1>
+<body>
+<header>
+    <div class="container header-content">
+        <h1>Gestione Prenotazioni</h1>
+        <a href="/" class="btn btn-secondary" style="color: white; border-color: white;">Torna alla Home</a>
+    </div>
 </header>
 
-<main id="main-prenotazioni">
-
-<table id="table-prenotazioni">
-
-    <thead id="thead-prenotazioni">
-        <tr>
-            <th>ID</th>
-            <th>Id Utente</th>
-            <th>Persone</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-
-    <tbody id="tbody-prenotazioni">
-
-        <tr th:each="p : ${prenotazioni}" th:id="'prenotazione-' + ${p.id}">
-            <td th:text="${p.id}" th:id="'p-id-' + ${p.id}"></td>
-            <td th:text="${p.utenteId}" th:id="'p-utente-' + ${p.id}"></td>
-            <td th:text="${p.numeroPersone}" th:id="'p-persone-' + ${p.id}"></td>
-            <td th:text="${p.dataOra}" th:id="'p-data-' + ${p.id}"></td>
-            <td>
-                <form th:action="@{/prenotazioni/{id}(id=${p.id})}" method="post" 
-                      th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare la prenotazione ID ' + ${p.id} + '?\');'">
-                    
-                    <input type="hidden" name="_method" value="DELETE" />
-                    <button type="submit" style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">
-                        Elimina
-                    </button>
-                </form>
-            </td>
-        </tr>
-
-    </tbody>
-
-</table>
-    <div style="margin-top: 20px;">
-        <a id="link-home" href="/">Torna alla Home</a>
+<main class="container mt-2">
+    <div class="card table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Utente</th>
+                    <th>Persone</th>
+                    <th>Data e Ora</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${prenotazioni}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.utenteId}"></td>
+                    <td th:text="${p.numeroPersone}"></td>
+                    <td th:text="${p.dataOra}"></td>
+                    <td>
+                        <form th:action="@{/prenotazioni/{id}(id=${p.id})}" method="post" 
+                              th:onsubmit="'return confirm(\'Sei sicuro di voler cancellare questa prenotazione?\');'">
+                            <input type="hidden" name="_method" value="DELETE" />
+                            <button class="btn btn-danger" type="submit">Elimina</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </main>
-
 </body>
 </html>

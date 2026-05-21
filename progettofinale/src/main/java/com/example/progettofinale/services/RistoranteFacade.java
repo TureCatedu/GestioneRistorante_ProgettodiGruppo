@@ -56,6 +56,11 @@ public class RistoranteFacade {
         return ristorante.cercaPrenotazionePerNomeCliente(nome, cognome);
     }
 
+    // ottieni le prenotazioni di un cliente specifico
+    public List<PrenotazioneResponse> getPrenotazioniPersonali(String email) {
+        return ristorante.getPrenotazioniPersonali(email);
+    }
+
     //verifica se la prenotazione appartiene al cliente
     public boolean verificaProprietaPrenotazione(Integer idPrenotazione, String emailCliente) {
         return ristorante.verificaProprietaPrenotazione(idPrenotazione, emailCliente);

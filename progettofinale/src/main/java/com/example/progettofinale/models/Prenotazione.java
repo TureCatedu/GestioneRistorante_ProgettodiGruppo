@@ -1,4 +1,5 @@
 package com.example.progettofinale.models;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -12,16 +13,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Entity
-public class Prenotazione{
+public class Prenotazione {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idPrenotazione; 
-    
+    private Integer idPrenotazione;
+
     @ManyToOne
-    @JoinColumn(name = "utente_id", nullable = false)
+    @JoinColumn(name = "utente_id")
     private Utente cliente;
-    
+
     @NotNull
     @Positive(message = "la prenotazione deve avere almeno 1 persona")
     private int numeroPersone;
@@ -38,10 +39,11 @@ public class Prenotazione{
         this.numeroPersone = numeroPersone;
         this.dataOra = dataOra;
     }
-    
+
     public Utente getCliente() {
         return this.cliente;
     }
+
     public void setCliente(Utente cliente) {
         this.cliente = cliente;
     }
@@ -62,7 +64,7 @@ public class Prenotazione{
         this.dataOra = dataOra;
     }
 
-    public int getId(){
+    public int getId() {
         return this.idPrenotazione;
     }
 }

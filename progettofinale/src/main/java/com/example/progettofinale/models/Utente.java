@@ -1,5 +1,6 @@
 package com.example.progettofinale.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -25,16 +26,15 @@ public class Utente {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "idPrenotazione")
-    private List<Prenotazione> prenotazione;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Prenotazione> prenotazioni = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
-
     // Costruttori, Getter e Setter
-    public Utente() {}
+    public Utente() {
+    }
 
     public Utente(String nome, String cognome, String email, String password, Ruolo ruolo) {
         this.nome = nome;
@@ -55,7 +55,7 @@ public class Utente {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
     public String getCognome() {
         return cognome;
     }
@@ -63,7 +63,7 @@ public class Utente {
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
-    
+
     public String getEmail() {
         return email;
     }
@@ -89,10 +89,10 @@ public class Utente {
     }
 
     public List<Prenotazione> getPrenotazioni() {
-        return prenotazione;
+        return prenotazioni;
     }
 
     public void setPrenotazioni(List<Prenotazione> prenotazione) {
-        this.prenotazione = prenotazione;
+        this.prenotazioni = prenotazione;
     }
 }

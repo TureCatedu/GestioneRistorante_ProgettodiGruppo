@@ -2,6 +2,7 @@ package com.example.progettofinale.controller;
 
 import com.example.progettofinale.models.PrenotazioneRequest;
 import com.example.progettofinale.models.PrenotazioneResponse;
+import com.example.progettofinale.repository.UtenteRepo;
 import com.example.progettofinale.services.RistoranteFacade;
 
 import org.springframework.security.access.AccessDeniedException;
@@ -19,13 +20,13 @@ public class PrenotazioneController {
 
     private final RistoranteFacade ristorante;
 
-    public PrenotazioneController(RistoranteFacade ristorante) {
+    public PrenotazioneController(RistoranteFacade ristorante, UtenteRepo utenteRepo) {
         this.ristorante = ristorante;
     }
 
     // Ricerca per ID (Proprietario o Staff)
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String findById(@PathVariable Integer id, Model model, Authentication authentication) {
 
         // Se sei un cliente, verifichiamo tramite la facade se la prenotazione ti appartiene
@@ -42,15 +43,25 @@ public class PrenotazioneController {
 
     // Ottieni tutte le prenotazioni (Solo staff)
     @GetMapping
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE')")
-    public String listaPrenotazioni(Model model) {
-        model.addAttribute("prenotazioni", ristorante.getPrenotazioni());
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')") // Aggiunto CLIENTE
+    public String listaPrenotazioni(Model model, Authentication authentication) { // Aggiunto Authentication
+        
+        List<PrenotazioneResponse> listaDaMostrare;
+
+        if (ristorante.isCliente(authentication)) {
+            listaDaMostrare = ristorante.getPrenotazioniPersonali(authentication.getName());
+        } else {
+            // Se è amministratore o cameriere, le prendiamo tutte
+            listaDaMostrare = ristorante.getPrenotazioni();
+        }
+
+        model.addAttribute("prenotazioni", listaDaMostrare);
         return "prenotazioni";
     }
 
     // Ricerca per Nome e Cognome (Solo staff)
     @GetMapping("/cerca")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public String findByCliente(
             @RequestParam String nome,
             @RequestParam String cognome,
@@ -63,7 +74,7 @@ public class PrenotazioneController {
 
     // Cerca prenotazioni per giorno corrente (Solo staff)
     @GetMapping("/oggi")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public String findPrenotazioniOggi(Model model) {
         List<PrenotazioneResponse> list = ristorante.getPrenotazioniOggi();
         model.addAttribute("prenotazioni", list);
@@ -72,7 +83,7 @@ public class PrenotazioneController {
 
     // Cerca per data (Solo staff)
     @GetMapping("/cerca-data")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public String findByData(@RequestParam String data, Model model) {
         List<PrenotazioneResponse> list = ristorante.cercaPrenotazionePerData(data);
         model.addAttribute("prenotazioni", list);
@@ -81,15 +92,20 @@ public class PrenotazioneController {
 
     // Inserimento Prenotazione (Tutti)
     @PostMapping
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String aggiungiPrenotazione(PrenotazioneRequest request, Authentication authentication) {
+        if(ristorante.isCliente(authentication))
+        {
+            ristorante.aggiungiPrenotazione(request);
+            return "redirect:/";
+        }
         ristorante.aggiungiPrenotazione(request);
         return "redirect:/prenotazioni";
     }
 
     // Modifica Prenotazione (Proprietario o Staff)
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String modificaPrenotazione(
             @PathVariable Integer id,
             PrenotazioneRequest request,
@@ -107,7 +123,7 @@ public class PrenotazioneController {
 
     // Cancellazione Prenotazione (Proprietario o Staff)
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
+    @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String eliminaPrenotazione(@PathVariable Integer id, Authentication authentication) {
 
         // Controllo di sicurezza centralizzato sulla Facade

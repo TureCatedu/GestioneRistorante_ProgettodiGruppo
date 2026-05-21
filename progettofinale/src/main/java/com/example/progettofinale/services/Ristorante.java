@@ -152,6 +152,18 @@ class Ristorante implements Subject {
         return prenotazioniResponse;
     }
 
+    // ottieni le prenotazioni specifiche di un utente tramite la sua email
+    public List<PrenotazioneResponse> getPrenotazioniPersonali(String emailUtente) {
+        return utenteRepo.findByEmail(emailUtente)
+                // Prende l'utente, estrae la sua lista di prenotazioni e la converte in DTO
+                .map(utente -> utente.getPrenotazioni().stream()
+                        .map(this::toPrenotazioneResponse)
+                        .toList()
+                )
+                // Se l'utente non viene trovato, restituisce una lista vuota
+                .orElse(List.of());
+    }
+
     // verifica proprietario prenotazione
 
     public boolean verificaProprietaPrenotazione(Integer idPrenotazione, String emailUtente) {
@@ -164,6 +176,6 @@ class Ristorante implements Subject {
     // verifica se l'utente è un cliente
     public boolean isCliente(Authentication authentication) {
         return authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_CLIENTE"));
+                .anyMatch(auth -> auth.getAuthority().equals("CLIENTE"));
     }
 }

@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Nuova Prenotazione</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body id="body-nuova-prenotazione">
-
-<header id="header-nuova-prenotazione">
-    <h1 id="title-nuova-prenotazione">Effettua una Prenotazione</h1>
+<body>
+<header>
+    <div class="container"><h1>Effettua una Prenotazione</h1></div>
 </header>
-
-<main id="main-nuova-prenotazione">
-
-    <form id="form-nuova-prenotazione" action="/prenotazioni" method="post">
-
-        <input type="hidden" id="input-utente-id" name="utenteId" th:value="${utenteLoggatoId}" required>
-
-        <label for="input-persone">Numero Persone:</label>
-        <input type="number" id="input-persone" name="numeroPersone" placeholder="Numero di ospiti" min="1" required>
-
-        <label for="input-data">Data e Ora Prenotazione:</label>
-        <input type="datetime-local" id="input-data" name="dataOra" required>
-
-        <button id="btn-invia-prenotazione" type="submit">Conferma Prenotazione</button>
-
-    </form>
-
-    <div style="margin-top: 15px;">
-        <a id="link-ritorno" href="/">Torna alla Home</a>
+<main class="container" style="max-width: 600px; margin-top: 30px;">
+    <div class="card">
+        <form th:action="@{/prenotazioni}" method="post">
+            <input type="hidden" name="utenteId" th:value="${utenteLoggatoId}" required>
+            
+            <div class="form-group">
+                <label>Numero Persone</label>
+                <input type="number" name="numeroPersone" placeholder="Es. 4" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Data e Ora</label>
+                <input type="datetime-local" name="dataOra" required>
+            </div>
+            
+            <button class="btn" type="submit">Conferma Prenotazione</button>
+        </form>
     </div>
-
+    <div class="text-center mt-2">
+        <a href="/" class="btn btn-secondary" style="width: auto;">Torna alla Home</a>
+    </div>
 </main>
 </body>
 </html>

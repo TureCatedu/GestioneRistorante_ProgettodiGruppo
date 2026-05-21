@@ -22,4 +22,6 @@ public interface PrenotazioneRepo extends JpaRepository<Prenotazione,Integer>{
 
     @Query("SELECT p FROM Prenotazione p WHERE FUNCTION('DATE', p.dataOra) = :data")
     List<Prenotazione> findByDataOnly(@Param("data") LocalDate data);
+
+    
 }

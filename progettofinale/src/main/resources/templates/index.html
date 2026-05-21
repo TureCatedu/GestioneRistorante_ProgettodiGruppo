@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Home</title>
+    <title>Home - Gestione Ristorante</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body id="body-index">
 
 <header id="header-index">
-    <h1 id="title-index">HOME</h1>
-    <div sec:authorize="isAuthenticated()" style="text-align: right; padding: 10px;">
-        Benvenuto, <span sec:authentication="name">Utente</span> | 
-        <a href="/logout" style="color: red;">Logout</a>
+    <div class="container header-content">
+        <h1 id="title-index">Gestione Ristorante</h1>
+        <div sec:authorize="isAuthenticated()" style="font-size: 0.9rem;">
+            Benvenuto, <strong><span sec:authentication="name">Utente</span></strong> | 
+            <a href="/logout" style="color: #e74c3c; text-decoration: none; margin-left: 10px;">Esci</a>
+        </div>
     </div>
 </header>
 
 <nav id="nav-index">
-    <a id="link-utenti" href="/utenti" sec:authorize="hasAuthority('AMMINISTRATORE')">Utenti</a>
-    
-    <a id="link-prenotazioni" href="/prenotazioni" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')">Visualizza Prenotazioni</a>
-    
-    <a id="link-nuova-prenotazione" href="/prenotazioni/nuova" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Nuova Prenotazione</a>
-    <a id="link-notifiche" href="/notificatore/utente/me" sec:authorize="isAuthenticated()">Notifiche</a>
-    <a id="link-profilo" href="/utenti/me" sec:authorize="isAuthenticated()">Il mio Profilo</a>
-    <a id="link-login" href="/logout" sec:authorize="isAnonymous()">logout</a>
+    <a href="/utenti" sec:authorize="hasAuthority('AMMINISTRATORE')">Gestione Utenti</a>
+    <a href="/prenotazioni" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Visualizza Prenotazioni</a>
+    <a href="/prenotazioni/nuova" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Nuova Prenotazione</a>
+    <a href="/notificatore/utente/me" sec:authorize="isAuthenticated()">Notifiche</a>
+    <a href="/utenti/me" sec:authorize="isAuthenticated()">Il mio Profilo</a>
+    <a href="/login" sec:authorize="isAnonymous()">Accedi</a>
 </nav>
 
-<main id="main-index">
+<main class="container text-center mt-2">
+    <div class="card">
+        <h2>Benvenuto nel portale</h2>
+        <p class="text-muted">Seleziona un'operazione dal menu in alto per iniziare.</p>
+    </div>
 </main>
 
 </body>
