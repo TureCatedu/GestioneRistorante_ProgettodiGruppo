@@ -90,6 +90,21 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
+.header-content a {
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 15px;
+    border-radius: 20px;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.header-content a:hover {
+    background-color: var(--primary-color);
+    color: white !important;
+    transform: translateY(-2px);
+}
+
 /* --- Form e Input --- */
 .form-group {
     margin-bottom: 22px;
@@ -192,19 +207,11 @@ thead {
     color: white;
 }
 
-th {
-    padding: 18px 15px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-td {
-    padding: 16px 15px;
+th, td {
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle; 
     border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-    vertical-align: middle;
 }
 
 tbody tr {
@@ -219,6 +226,11 @@ tbody tr:last-child td {
     border-bottom: none;
 }
 
+th:nth-child(1), td:nth-child(1),
+th:nth-child(2), td:nth-child(2),
+th:nth-child(3), td:nth-child(3) {
+    width: 10%;
+}
 /* --- Visualizzazione Dettagli (Profilo, Utente, Singola Prenotazione) --- */
 .detail-list {
     margin: 0;
