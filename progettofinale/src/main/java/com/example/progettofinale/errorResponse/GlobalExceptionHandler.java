@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // GESTIONE ERRORE ACCESSO NEGATO
+    // errori di accesso negato
     @ExceptionHandler(value = AccessDeniedException.class)
     public String handleAccessDeniedException(AccessDeniedException e, Model model) {
         model.addAttribute("status", 403);
