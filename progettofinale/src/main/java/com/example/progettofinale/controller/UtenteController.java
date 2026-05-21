@@ -6,22 +6,20 @@ import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.services.UtenteService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/utenti")
 public class UtenteController {
-    
+
     private final UtenteService utenteService;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,7 +29,7 @@ public class UtenteController {
     }
 
     // GET: trova utente per ID
-    @GetMapping("/{id}") 
+    @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String findById(@PathVariable Integer id, Model model) {
 
@@ -58,11 +56,10 @@ public class UtenteController {
     @GetMapping("/cognome-nome")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE')")
     public String findByCognomeNome(@RequestParam String cognome,
-                                     @RequestParam String nome,
-                                     Model model) {
+            @RequestParam String nome,
+            Model model) {
 
-        List<LoginResponse> utenti =
-                utenteService.findByCognomeAndNomeIgnoreCase(cognome, nome);
+        List<LoginResponse> utenti = utenteService.findByCognomeAndNomeIgnoreCase(cognome, nome);
 
         model.addAttribute("utenti", utenti);
 
@@ -73,7 +70,7 @@ public class UtenteController {
     @GetMapping("/ruolo")
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
     public String findByRuolo(@RequestParam Ruolo ruolo,
-                              Model model) {
+            Model model) {
 
         List<LoginResponse> utenti = utenteService.findByRuolo(ruolo);
 
@@ -81,11 +78,12 @@ public class UtenteController {
 
         return "utenti";
     }
-    // GET: Ottieni il profilo appena loggato 
+
+    // GET: Ottieni il profilo appena loggato
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String getMioProfilo(Authentication authentication,
-                                Model model) {
+            Model model) {
 
         LoginResponse utente = utenteService.findByEmail(authentication.getName());
 
@@ -105,30 +103,33 @@ public class UtenteController {
         }
 
         // Dopo il logout, reindirizziamo l'utente alla pagina di login (o alla home)
-        return "redirect:/login"; 
-    }*/
-   
-    /* 
-    Login Deprecato, ci pensa security config
-    
-    // POST: Login 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request,
-                        Model model) {
-
-         LoginResponse loginResponse = utenteService.findByEmailComplete(request.email()).filter(u -> passwordEncoder.matches(request.password(), u.getPassword())).map(u ->new LoginResponse(
-                    u.getId(),
-                    u.getNome(),
-                    u.getCognome(),
-                    u.getEmail(),
-                    u.getRuolo()
-                )).orElseGet(() -> new LoginResponse(null, null, null, null, null));
-
-        model.addAttribute("utente", loginResponse);
-
-        return "redirect:/";
+        return "redirect:/login";
     }
-    */
+    /*
+     * Login Deprecato, ci pensa security config
+     * 
+     * // POST: Login
+     * 
+     * @PostMapping("/login")
+     * public String login(@RequestBody LoginRequest request,
+     * Model model) {
+     * 
+     * LoginResponse loginResponse =
+     * utenteService.findByEmailComplete(request.email()).filter(u ->
+     * passwordEncoder.matches(request.password(), u.getPassword())).map(u ->new
+     * LoginResponse(
+     * u.getId(),
+     * u.getNome(),
+     * u.getCognome(),
+     * u.getEmail(),
+     * u.getRuolo()
+     * )).orElseGet(() -> new LoginResponse(null, null, null, null, null));
+     * 
+     * model.addAttribute("utente", loginResponse);
+     * 
+     * return "redirect:/";
+     * }
+     */
 
     // POST: Crea un nuovo utente
     @PostMapping
@@ -139,11 +140,12 @@ public class UtenteController {
 
         return "redirect:/login";
     }
+
     // PUT: Modifica un utente (Tutti i ruoli)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')")
     public String updateUtente(@PathVariable Integer id,
-                               Utente utenteAggiornato) {
+            Utente utenteAggiornato) {
 
         Utente utente = utenteService.findByIdComplete(id).orElseThrow(() -> new UtenteNonTrovatoException(id));
         if (utente != null) {
@@ -158,6 +160,21 @@ public class UtenteController {
         return "redirect:/utenti";
     }
     
+    @PutMapping("/{id}/cambia-ruolo")
+    @PreAuthorize("hasAuthority('AMMINISTRATORE')")
+    public String updateRuolo(@PathVariable Integer id, @RequestParam Ruolo nuovoRuolo) {
+        
+        Optional<Utente> utenteOptional = utenteService.findByIdComplete(id);
+        
+        if (utenteOptional.isPresent()) {
+            Utente utente = utenteOptional.get();
+            utente.setRuolo(nuovoRuolo);
+            utenteService.save(utente);
+        }
+    
+        return "redirect:/utenti";
+    }
+
     // DELETE: Rimuove un utente per ID (Solo Admin)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('AMMINISTRATORE')")
