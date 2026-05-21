@@ -86,7 +86,7 @@ public class NotificatoreController {
 
         notificatoreFacade.cancellaNotificheUtente(idUtente);
 
-        return "redirect:/notifiche";
+        return "redirect:/notificatore";
     }
     //cancella notifiche per utente
     @DeleteMapping("/utente/me")
