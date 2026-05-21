@@ -3,14 +3,17 @@ package com.example.progettofinale.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
 import com.example.progettofinale.repository.UtenteRepo;
 
+@Service
 public class UtenteService {
     private final UtenteRepo utenteRepo;
-
+    //costruttore per injection di UtenteRepo
     public UtenteService(UtenteRepo utenteRepo) {
         this.utenteRepo = utenteRepo;
     }
@@ -50,7 +53,7 @@ public class UtenteService {
     public LoginResponse save(Utente utente) {
         return toLoginResponse(utenteRepo.save(utente));
     }
-
+    // elimina utente
     public void deleteById(Integer id) {
         utenteRepo.deleteById(id);
     }
