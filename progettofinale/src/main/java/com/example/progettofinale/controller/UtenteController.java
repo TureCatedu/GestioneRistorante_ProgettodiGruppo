@@ -1,6 +1,5 @@
 package com.example.progettofinale.controller;
 
-import com.example.progettofinale.models.LoginRequest;
 import com.example.progettofinale.models.LoginResponse;
 import com.example.progettofinale.models.Ruolo;
 import com.example.progettofinale.models.Utente;
