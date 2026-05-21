@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,30 +5,32 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body id="body-profilo">
-
 <header id="header-profilo">
-    <h1 id="title-profilo">Il mio Profilo</h1>
+    <div class="container header-content">
+        <h1 id="title-profilo">Il mio Profilo</h1>
+        <a href="/" style="color: white; text-decoration: none;">Torna alla Home</a>
+    </div>
 </header>
+<main id="main-profilo" class="container mt-2" style="max-width: 600px;">
 
-<main id="main-profilo">
-
-    <div id="profilo-container" th:if="${utenteLoggato != null}">
+    <div class="card detail-list" id="profilo-container" th:if="${utenteLoggato != null}">
         <p id="profilo-id"><strong>ID Utente:</strong> <span th:text="${utenteLoggato.id}"></span></p>
         <p id="profilo-nome"><strong>Nome:</strong> <span th:text="${utenteLoggato.nome}"></span></p>
         <p id="profilo-cognome"><strong>Cognome:</strong> <span th:text="${utenteLoggato.cognome}"></span></p>
         <p id="profilo-email"><strong>Email:</strong> <span th:text="${utenteLoggato.email}"></span></p>
-        <p id="profilo-ruolo"><strong>Ruolo:</strong> <span th:text="${utenteLoggato.ruolo}"></span></p>
+        <p id="profilo-ruolo">
+            <strong>Ruolo:</strong> 
+            <span th:text="${utenteLoggato.ruolo}" style="background: var(--primary-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;"></span>
+        </p>
     </div>
 
-    <div id="profilo-not-found" th:if="${utenteLoggato == null}">
-        <p>Impossibile caricare i dati del profilo.</p>
+    <div class="card alert-danger text-center" id="profilo-not-found" th:if="${utenteLoggato == null}">
+        <p style="margin:0;">Impossibile caricare i dati del profilo.</p>
     </div>
 
-    <div style="margin-top: 20px;">
-        <a id="link-home" href="/">Torna alla Home</a>
+    <div class="text-center mt-2">
+        <a id="link-home" href="/" class="btn btn-secondary" style="width: auto;">Torna alla Home</a>
     </div>
-
 </main>
-
 </body>
-<html xmlns:th="http://www.thymeleaf.org"></html>
+</html>

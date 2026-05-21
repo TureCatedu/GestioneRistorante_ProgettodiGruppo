@@ -1,3 +1,4 @@
+<!-- Invariato, andava già benissimo ed eredita il nuovo CSS magnificamente -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -5,17 +6,15 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body id="body-index">
-
 <header id="header-index">
     <div class="container header-content">
         <h1 id="title-index">Gestione Ristorante</h1>
-        <div sec:authorize="isAuthenticated()" style="font-size: 0.9rem;">
+        <div sec:authorize="isAuthenticated()" style="font-size: 0.95rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px;">
             Benvenuto, <strong><span sec:authentication="name">Utente</span></strong> | 
-            <a href="/logout" style="color: #e74c3c; text-decoration: none; margin-left: 10px;">Esci</a>
+            <a href="/logout" style="color: #ff7675; text-decoration: none; margin-left: 10px; font-weight: 600;">Esci</a>
         </div>
     </div>
 </header>
-
 <nav id="nav-index">
     <a href="/utenti" sec:authorize="hasAuthority('AMMINISTRATORE')">Gestione Utenti</a>
     <a href="/prenotazioni" sec:authorize="hasAnyAuthority('AMMINISTRATORE', 'CAMERIERE', 'CLIENTE')">Visualizza Prenotazioni</a>
@@ -24,13 +23,11 @@
     <a href="/utenti/me" sec:authorize="isAuthenticated()">Il mio Profilo</a>
     <a href="/login" sec:authorize="isAnonymous()">Accedi</a>
 </nav>
-
 <main class="container text-center mt-2">
-    <div class="card">
-        <h2>Benvenuto nel portale</h2>
-        <p class="text-muted">Seleziona un'operazione dal menu in alto per iniziare.</p>
+    <div class="card" style="padding: 60px 30px;">
+        <h2 style="font-size: 2rem; color: var(--secondary-color); margin-bottom: 10px;">Benvenuto nel portale</h2>
+        <p class="text-muted" style="font-size: 1.1rem;">Seleziona un'operazione dal menu in alto per iniziare.</p>
     </div>
 </main>
-
 </body>
 </html>

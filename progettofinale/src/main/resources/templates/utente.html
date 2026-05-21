@@ -4,29 +4,29 @@
     <title>Utente</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body id="body-utente">
-
 <header id="header-utente">
-    <h1 id="title-utente">Dettaglio Utente</h1>
+    <div class="container header-content">
+        <h1 id="title-utente">Dettaglio Utente</h1>
+        <a href="/utenti" style="color: white; text-decoration: none;">Torna alla Lista</a>
+    </div>
 </header>
+<main id="main-utente" class="container mt-2" style="max-width: 600px;">
 
-<main id="main-utente">
+    <div class="card detail-list" id="utente-container" th:if="${utente != null}">
+        <p><strong>Nome:</strong> <span id="utente-nome" th:text="${utente.nome}"></span></p>
+        <p><strong>Cognome:</strong> <span id="utente-cognome" th:text="${utente.cognome}"></span></p>
+        <p><strong>Email:</strong> <span id="utente-email" th:text="${utente.email}"></span></p>
+        <p><strong>Ruolo:</strong> <span id="utente-ruolo" th:text="${utente.ruolo}"></span></p>
+    </div>
 
-<div id="utente-container" th:if="${utente != null}">
+    <div class="card alert-danger text-center" id="utente-not-found" th:if="${utente == null}">
+        Utente non trovato
+    </div>
 
-    <p id="utente-nome" th:text="${utente.nome}"></p>
-    <p id="utente-cognome" th:text="${utente.cognome}"></p>
-    <p id="utente-email" th:text="${utente.email}"></p>
-    <p id="utente-ruolo" th:text="${utente.ruolo}"></p>
-
-</div>
-
-<div id="utente-not-found" th:if="${utente == null}">
-    Utente non trovato
-</div>
-
+    <div class="text-center mt-2">
+        <a href="/" class="btn btn-secondary" style="width: auto;">Torna alla Home</a>
+    </div>
 </main>
-
 </body>
 </html>

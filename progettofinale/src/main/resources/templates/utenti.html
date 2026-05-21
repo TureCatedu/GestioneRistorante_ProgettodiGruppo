@@ -4,44 +4,43 @@
     <title>Utenti</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body id="body-utenti">
-
 <header id="header-utenti">
-    <h1 id="title-utenti">Lista Utenti</h1>
+    <div class="container header-content">
+        <h1 id="title-utenti">Lista Utenti</h1>
+        <a href="/" style="color: white; text-decoration: none;">Torna alla Home</a>
+    </div>
 </header>
+<main id="main-utenti" class="container mt-2">
 
-<main id="main-utenti">
+    <div class="card table-responsive">
+        <table id="table-utenti">
+            <thead id="thead-utenti">
+                <tr id="row-header-utenti">
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Email</th>
+                    <th>Ruolo</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-utenti">
+                <tr th:each="u : ${utenti}" th:id="'utente-' + ${u.id}">
+                    <td th:text="${u.id}" th:id="'utente-id-' + ${u.id}"></td>
+                    <td th:text="${u.nome}" th:id="'utente-nome-' + ${u.id}"></td>
+                    <td th:text="${u.cognome}" th:id="'utente-cognome-' + ${u.id}"></td>
+                    <td th:text="${u.email}" th:id="'utente-email-' + ${u.id}"></td>
+                    <td>
+                        <span th:text="${u.ruolo}" th:id="'utente-ruolo-' + ${u.id}" style="background: var(--secondary-color); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem;"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-<table id="table-utenti">
-
-    <thead id="thead-utenti">
-        <tr id="row-header-utenti">
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Cognome</th>
-            <th>Email</th>
-            <th>Ruolo</th>
-        </tr>
-    </thead>
-
-    <tbody id="tbody-utenti">
-
-        <tr th:each="u : ${utenti}" th:id="'utente-' + ${u.id}">
-            <td th:text="${u.id}" th:id="'utente-id-' + ${u.id}"></td>
-            <td th:text="${u.nome}" th:id="'utente-nome-' + ${u.id}"></td>
-            <td th:text="${u.cognome}" th:id="'utente-cognome-' + ${u.id}"></td>
-            <td th:text="${u.email}" th:id="'utente-email-' + ${u.id}"></td>
-            <td th:text="${u.ruolo}" th:id="'utente-ruolo-' + ${u.id}"></td>
-        </tr>
-
-    </tbody>
-
-</table>
-    <div style="margin-top: 20px;">
-        <a id="link-home" href="/">Torna alla Home</a>
+    <div class="text-center mt-2">
+        <a id="link-home" href="/" class="btn btn-secondary" style="width: auto;">Torna alla Home</a>
     </div>
 </main>
-
 </body>
 </html>
